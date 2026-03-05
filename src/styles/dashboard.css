@@ -1,0 +1,95 @@
+.dashboard-wrapper {
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+  background: #f5f7fb;
+  font-family: "Segoe UI", sans-serif;
+}
+
+/* HEADER */
+
+.header {
+  margin-top: 20px;
+  margin-bottom: 30px;
+}
+
+.header-content {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  flex-wrap: wrap;
+}
+
+.header-left {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+.logo-img {
+  width: 55px;
+  height: 55px;
+  border-radius: 50%;
+  object-fit: cover;
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
+}
+
+.app-title {
+  font-weight: 600;
+  margin: 0;
+}
+
+/* BODY */
+
+.dashboard-body {
+  flex: 1;
+  padding-bottom: 30px;
+}
+
+/* CARDS */
+
+.dashboard-card {
+  background: white;
+  padding: 25px;
+  border-radius: 12px;
+  text-align: center;
+  box-shadow: 0 8px 18px rgba(0, 0, 0, 0.08);
+  transition: 0.3s;
+}
+
+.dashboard-card:hover {
+  transform: translateY(-5px);
+}
+
+/* FOOTER */
+
+.footer {
+  text-align: center;
+  padding: 15px;
+  border-top: 1px solid #ddd;
+  background: white;
+}
+
+.status-card {
+  padding: 15px;
+  border-radius: 10px;
+  font-weight: 600;
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+}
+/* MOBILE */
+
+@media (max-width: 768px) {
+  .header-content {
+    flex-direction: column;
+    gap: 10px;
+    text-align: center;
+  }
+
+  .logout-btn {
+    width: 100%;
+  }
+
+  .dashboard-card {
+    padding: 20px;
+  }
+}

@@ -1,24 +1,28 @@
-import logo from './logo.svg';
-import './App.css';
-
+import React from "react";
+import { BrowserRouter, Routes, Route } from "react-router-dom";
+import Dashboard from "./pages/Dashboard";
+import LoginPage from "./pages/LoginPage";
+import "./styles/login.css";
+import EmiPage from "./pages/EmiPage";
+import Borrowers from "./pages/Borrowers";
+import DailyExpenditure from "./pages/DailyExpenditure";
+import Maintenance from "./pages/Maintenance";
+import RoomRent from "./pages/RoomRent";
+import Food from "./pages/Food";
 function App() {
   return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
-    </div>
+    <BrowserRouter>
+      <Routes>
+        <Route path="/" element={<LoginPage />} />
+        <Route path="/dashboard" element={<Dashboard />} />
+        <Route path="/borrowers" element={<Borrowers />} />
+        <Route path="/emi/:id" element={<EmiPage />} />
+        <Route path="/daily-expenditure" element={<DailyExpenditure />} />
+        <Route path="/room-rent" element={<RoomRent />} />
+        <Route path="/maintenance" element={<Maintenance />} />
+        <Route path="/food" element={<Food />} />
+      </Routes>
+    </BrowserRouter>
   );
 }
 

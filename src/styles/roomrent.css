@@ -1,0 +1,138 @@
+/* BODY SPACING */
+
+.dashboard-body {
+  margin-top: 25px;
+  margin-bottom: 40px;
+}
+
+/* STATUS CARDS */
+
+.dashboard-body .card {
+  border: none;
+  border-radius: 10px;
+  transition: all 0.2s ease;
+}
+
+.dashboard-body .card:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 6px 15px rgba(0, 0, 0, 0.08);
+}
+
+/* CARD HEADER */
+
+.card-header {
+  font-weight: 600;
+  font-size: 15px;
+  border-bottom: none;
+}
+
+/* CARD BODY */
+
+.card-body {
+  padding: 20px;
+}
+
+/* STATUS VALUES */
+
+.card-body h4 {
+  font-weight: 700;
+  margin-top: 5px;
+}
+
+/* INPUT FIELDS */
+
+.form-control,
+.form-select {
+  border-radius: 6px;
+  padding: 8px 10px;
+  font-size: 14px;
+}
+
+.form-control:focus,
+.form-select:focus {
+  box-shadow: none;
+  border-color: #0d6efd;
+}
+
+/* BUTTONS */
+
+.btn {
+  font-size: 14px;
+  border-radius: 6px;
+}
+
+.btn-success {
+  font-weight: 600;
+}
+
+/* MONTH FILTER */
+
+select.form-select {
+  max-width: 250px;
+}
+
+/* TABLE */
+
+.table {
+  font-size: 14px;
+  margin-bottom: 0;
+}
+
+.table thead th {
+  background: #f8f9fa;
+  font-weight: 600;
+  text-align: center;
+}
+
+.table tbody td {
+  vertical-align: middle;
+  text-align: center;
+}
+
+/* TABLE SCROLL FOR MOBILE */
+
+.table-responsive {
+  border-radius: 8px;
+  overflow-x: auto;
+}
+
+/* REMAINING COLOR */
+
+.text-danger {
+  font-weight: 700;
+}
+
+.text-success {
+  font-weight: 700;
+}
+
+/* FOOTER FIX */
+
+.footer {
+  text-align: center;
+  padding: 12px;
+  border-top: 1px solid #e9ecef;
+  margin-top: 40px;
+  background: #fff;
+}
+
+/* MOBILE RESPONSIVE */
+
+@media (max-width: 768px) {
+  .card-body {
+    padding: 15px;
+  }
+
+  h4 {
+    font-size: 18px;
+  }
+
+  .table {
+    font-size: 13px;
+  }
+
+  .form-control,
+  .form-select {
+    font-size: 13px;
+  }
+}
