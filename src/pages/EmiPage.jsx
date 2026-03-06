@@ -18,6 +18,7 @@ const EmiPage = () => {
   const [amount, setAmount] = useState("");
   const [date, setDate] = useState("");
   const [status, setStatus] = useState("");
+  const [borrowerName, setBorrowerName] = useState("");
 
   const totalAmount = 18500;
 
@@ -64,6 +65,20 @@ const EmiPage = () => {
 
   let remaining = totalAmount;
 
+  /* LOAD BORROWER DETAILS */
+
+  useEffect(() => {
+    const borrowerRef = ref(db, `borrowers/${id}`);
+
+    onValue(borrowerRef, (snapshot) => {
+      const data = snapshot.val();
+
+      if (data) {
+        setBorrowerName(data.name);
+      }
+    });
+  }, [id]);
+
   return (
     <div className="dashboard-wrapper">
       {/* HEADER */}
@@ -79,7 +94,7 @@ const EmiPage = () => {
           <div className="d-flex gap-2">
             <button
               className="btn btn-primary"
-              onClick={() => navigate("/borrowers")}
+              onClick={() => navigate("/dashboard")}
             >
               Home
             </button>
@@ -94,7 +109,10 @@ const EmiPage = () => {
       {/* BODY */}
 
       <div className="container emi-body">
-        <h3 className="text-center mb-4">Borrower EMI Payment</h3>
+        <h3 className="text-center mb-4">
+          EMI Payment Details for{" "}
+          <span className="text-primary">{borrowerName}</span>
+        </h3>
 
         <div className="emi-summary">
           <h5>Total Amount : ₹ {totalAmount}</h5>

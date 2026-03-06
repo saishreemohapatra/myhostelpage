@@ -91,7 +91,7 @@ const Dashboard = () => {
             </div>
           </div>
 
-          {/* GOURAB DASH EMI */}
+          {/* EMI */}
           <div className="col-lg-4 col-md-6 col-12">
             <div className="dashboard-card">
               <h5>EMI</h5>

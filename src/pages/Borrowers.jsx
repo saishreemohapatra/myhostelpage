@@ -119,7 +119,7 @@ const Borrowers = () => {
           <div className="d-flex gap-2">
             <button
               className="btn btn-primary"
-              onClick={() => navigate("/borrowers")}
+              onClick={() => navigate("/dashboard")}
             >
               Home
             </button>
