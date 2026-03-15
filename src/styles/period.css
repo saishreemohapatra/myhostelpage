@@ -1,0 +1,25 @@
+.period-body {
+  margin-top: 30px;
+  flex: 1;
+}
+
+table th {
+  background: #ffe5e7;
+  font-size: 14px;
+}
+
+table td {
+  font-size: 14px;
+  text-align: center;
+}
+
+@media (max-width: 768px) {
+  .app-title {
+    font-size: 18px;
+  }
+
+  .logo-img {
+    width: 40px;
+    height: 40px;
+  }
+}

@@ -35,6 +35,21 @@ const Dashboard = () => {
       {/* BODY */}
       <div className="container dashboard-body">
         <div className="row g-4">
+          {/* PERIOD COUNTER */}
+          <div className="col-lg-4 col-md-6 col-12">
+            <div className="dashboard-card">
+              <h5>Period Counter</h5>
+              <p className="mb-3">Track monthly period cycle</p>
+
+              <button
+                className="btn btn-danger w-100 fw-semibold"
+                onClick={() => navigate("/period")}
+              >
+                Open
+              </button>
+            </div>
+          </div>
+
           {/* FOOD */}
           <div className="col-lg-4 col-md-6 col-12">
             <div className="dashboard-card">
