@@ -34,6 +34,7 @@ import {
   markAdminActivitySeen,
   normalizeExtraQuestions,
   normalizeThread,
+  syncLoveFormTextareaHeight,
 } from "../services/loveFormHelpers";
 import "../styles/loveform.css";
 
@@ -82,8 +83,13 @@ const countAnswered = (steps, currentStepIdx) => {
 const ConversationThread = ({ messages, questionId, onReply }) => {
   const [draft, setDraft] = useState("");
   const [isSending, setIsSending] = useState(false);
+  const replyTextRef = useRef(null);
   const lastMessage = messages[messages.length - 1];
   const canReply = lastMessage?.sender === "admin";
+
+  useEffect(() => {
+    syncLoveFormTextareaHeight(replyTextRef.current);
+  }, [draft, canReply]);
 
   if (!messages.length) return null;
 
@@ -95,6 +101,7 @@ const ConversationThread = ({ messages, questionId, onReply }) => {
     try {
       await onReply(questionId, text);
       setDraft("");
+      syncLoveFormTextareaHeight(replyTextRef.current);
     } finally {
       setIsSending(false);
     }
@@ -117,9 +124,13 @@ const ConversationThread = ({ messages, questionId, onReply }) => {
       {canReply ? (
         <form className="lf-user-reply-form" onSubmit={handleSubmit}>
           <textarea
-            className="lf-user-reply-input"
+            ref={replyTextRef}
+            className="lf-user-reply-input lf-input-para--autogrow"
             value={draft}
-            onChange={(e) => setDraft(e.target.value)}
+            onChange={(e) => {
+              setDraft(e.target.value);
+              syncLoveFormTextareaHeight(e.target);
+            }}
             rows={2}
             placeholder="Write your reply..."
           />
@@ -142,6 +153,11 @@ const FollowUpQuestionForm = ({ question, onSubmit, navigate }) => {
   const [answer, setAnswer] = useState("");
   const [isSaving, setIsSaving] = useState(false);
   const [error, setError] = useState("");
+  const followUpTextRef = useRef(null);
+
+  useEffect(() => {
+    syncLoveFormTextareaHeight(followUpTextRef.current);
+  }, [answer]);
 
   const handleSubmit = async (e) => {
     e.preventDefault();
@@ -190,14 +206,16 @@ const FollowUpQuestionForm = ({ question, onSubmit, navigate }) => {
         <div className="lf-q-number">New question from admin</div>
         <h3 className="lf-q-text">{question.text}</h3>
         <textarea
-          className="lf-input-para"
+          ref={followUpTextRef}
+          className="lf-input-para lf-input-para--autogrow"
           placeholder="Your answer..."
           value={answer}
           onChange={(e) => {
             setAnswer(e.target.value);
             if (error) setError("");
+            syncLoveFormTextareaHeight(e.target);
           }}
-          rows={6}
+          rows={3}
           autoFocus
         />
         {error && <div className="lf-error">{error}</div>}
@@ -700,12 +718,19 @@ const LoveFormPage = () => {
         setCurrentInput("");
       } else {
         setCurrentInput(answers[step.question.id] || "");
-        setTimeout(() => inputRef.current?.focus(), 300);
+        setTimeout(() => {
+          inputRef.current?.focus();
+          syncLoveFormTextareaHeight(inputRef.current);
+        }, 300);
       }
       setError("");
       setUploadStatus("");
     }
   }, [stepIdx, answers]);
+
+  useEffect(() => {
+    syncLoveFormTextareaHeight(inputRef.current);
+  }, [currentInput, stepIdx]);
 
   const currentStep = STEPS[stepIdx];
 
@@ -1276,7 +1301,7 @@ const LoveFormPage = () => {
             ) : (
               <textarea
                 ref={inputRef}
-                className="lf-input-para"
+                className="lf-input-para lf-input-para--autogrow"
                 placeholder={question.placeholder}
                 value={currentInput}
                 onChange={(e) => {
@@ -1286,9 +1311,10 @@ const LoveFormPage = () => {
                     ...prev,
                     [question.id]: e.target.value,
                   }));
+                  syncLoveFormTextareaHeight(e.target);
                 }}
                 style={{ "--accent": section.color }}
-                rows={5}
+                rows={3}
               />
             )}
             {error && <div className="lf-error">{error}</div>}

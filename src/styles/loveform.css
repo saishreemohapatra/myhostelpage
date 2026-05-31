@@ -621,6 +621,20 @@
   line-height: 1.7;
 }
 
+/* Paragraph fields: grow with content instead of inner scrollbars */
+.lf-input-para--autogrow {
+  resize: none;
+  overflow-y: hidden;
+  scrollbar-width: none;
+  -ms-overflow-style: none;
+}
+
+.lf-input-para--autogrow::-webkit-scrollbar {
+  display: none;
+  width: 0;
+  height: 0;
+}
+
 .lf-input-para:focus {
   border-color: var(--accent, #e91e63);
   box-shadow: 0 0 0 3px rgba(233, 30, 99, 0.1);
@@ -1534,10 +1548,19 @@
   border: 1.5px solid #f8bbd0;
   border-radius: 10px;
   padding: 9px 10px;
-  resize: vertical;
+  resize: none;
   min-height: 44px;
   font-family: inherit;
   outline: none;
+  overflow-y: hidden;
+  scrollbar-width: none;
+  -ms-overflow-style: none;
+}
+
+.lf-user-reply-input::-webkit-scrollbar {
+  display: none;
+  width: 0;
+  height: 0;
 }
 
 .lf-user-reply-input:focus {
@@ -1611,6 +1634,15 @@
 
   .lf-input-para {
     min-height: 100px;
+    font-size: 16px; /* prevents iOS zoom-on-focus */
+  }
+
+  .lf-input-para--autogrow {
+    field-sizing: content;
+  }
+
+  .lf-user-reply-input {
+    font-size: 16px;
   }
 
   .lf-nav-btn {

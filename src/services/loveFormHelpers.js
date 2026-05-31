@@ -118,3 +118,14 @@ export const markAdminActivitySeen = (response) => {
     localStorage.setItem(LOVE_ADMIN_REPLY_SEEN_KEY, latest.createdAt);
   }
 };
+
+/** Grow paragraph textareas to fit content (avoids inner scrollbars on mobile). */
+export const syncLoveFormTextareaHeight = (textarea) => {
+  if (!textarea || textarea.tagName !== "TEXTAREA") return;
+  const min = parseInt(
+    getComputedStyle(textarea).minHeight || "100",
+    10,
+  );
+  textarea.style.height = "auto";
+  textarea.style.height = `${Math.max(min, textarea.scrollHeight)}px`;
+};
