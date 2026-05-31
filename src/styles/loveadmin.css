@@ -20,20 +20,126 @@
   padding: 24px;
 }
 
-.la-login-bg--embedded {
-  min-height: auto;
-  padding: 20px 16px 24px;
-  background: linear-gradient(135deg, #1a0035 0%, #2d0050 100%);
+/* Modal shell (inside AdminLoginModal on home page) */
+.la-login-shell--modal {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 48px 20px 28px;
+  min-height: 0;
 }
 
-.la-login-bg--embedded .la-login-card {
+.la-login-card--modal {
   width: 100%;
-  max-width: none;
+  max-width: 100%;
   margin: 0;
+  padding: 36px 28px 32px;
+  box-shadow: none;
+  border: none;
+  background: transparent;
+  animation: laCardModalIn 0.55s cubic-bezier(0.22, 1, 0.36, 1) 0.12s both;
 }
 
-.la-login-bg--embedded .la-login-title {
-  font-size: 1.35rem;
+@keyframes laCardModalIn {
+  from {
+    opacity: 0;
+    transform: translateY(16px) scale(0.97);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0) scale(1);
+  }
+}
+
+.la-login-icon--pulse {
+  animation: laIconPulse 2.2s ease-in-out infinite;
+}
+
+@keyframes laIconPulse {
+  0%,
+  100% {
+    transform: scale(1);
+    filter: drop-shadow(0 0 0 rgba(233, 30, 99, 0));
+  }
+  50% {
+    transform: scale(1.08);
+    filter: drop-shadow(0 0 12px rgba(233, 30, 99, 0.5));
+  }
+}
+
+.la-field-group--animate {
+  animation: laFieldIn 0.5s cubic-bezier(0.22, 1, 0.36, 1) both;
+}
+
+.la-field-group--animate:nth-child(1) {
+  animation-delay: 0.2s;
+}
+
+.la-field-group--animate:nth-child(2) {
+  animation-delay: 0.28s;
+}
+
+.la-btn-login--shine {
+  animation: laFieldIn 0.5s cubic-bezier(0.22, 1, 0.36, 1) 0.36s both;
+  position: relative;
+  overflow: hidden;
+}
+
+.la-btn-login--shine::after {
+  content: "";
+  position: absolute;
+  top: 0;
+  left: -100%;
+  width: 60%;
+  height: 100%;
+  background: linear-gradient(
+    90deg,
+    transparent,
+    rgba(255, 255, 255, 0.25),
+    transparent
+  );
+  animation: laBtnShine 3s ease-in-out infinite;
+}
+
+@keyframes laFieldIn {
+  from {
+    opacity: 0;
+    transform: translateX(-12px);
+  }
+  to {
+    opacity: 1;
+    transform: translateX(0);
+  }
+}
+
+@keyframes laBtnShine {
+  0%,
+  70%,
+  100% {
+    left: -100%;
+  }
+  85% {
+    left: 120%;
+  }
+}
+
+.la-login-error--shake {
+  animation: laErrorShake 0.45s ease;
+}
+
+@keyframes laErrorShake {
+  0%,
+  100% {
+    transform: translateX(0);
+  }
+  20%,
+  60% {
+    transform: translateX(-6px);
+  }
+  40%,
+  80% {
+    transform: translateX(6px);
+  }
 }
 
 .la-floating-bg {

@@ -9,19 +9,14 @@ import photo3 from "../assets/Photo-3.jpeg";
 import { signInWithEmailAndPassword } from "firebase/auth";
 import { auth } from "../services/firebase";
 import { useNavigate } from "react-router-dom";
-import LoveAdminLoginScreen from "../components/LoveAdminLoginScreen";
+import AdminLoginModal from "../components/AdminLoginModal";
 import { setAdminLoggedIn } from "../services/loveAdminAuth";
 
-const LOGIN_MODES = {
-  MESS: "mess",
-  ADMIN: "admin",
-};
-
 const LoginPage = () => {
-  const [mode, setMode] = useState(LOGIN_MODES.MESS);
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [showPassword, setShowPassword] = useState(false);
+  const [adminModalOpen, setAdminModalOpen] = useState(false);
 
   const navigate = useNavigate();
 
@@ -46,6 +41,25 @@ const LoginPage = () => {
 
   return (
     <div className="login-wrapper">
+      <button
+        type="button"
+        className="login-admin-corner-btn"
+        onClick={() => setAdminModalOpen(true)}
+        aria-label="Open admin login"
+        title="Admin login"
+      >
+        <span className="login-admin-corner-btn__icon">
+          <i className="bi bi-shield-lock-fill" aria-hidden="true" />
+        </span>
+        <span className="login-admin-corner-btn__text">Admin</span>
+      </button>
+
+      <AdminLoginModal
+        open={adminModalOpen}
+        onClose={() => setAdminModalOpen(false)}
+        onLogin={handleAdminLogin}
+      />
+
       <div className="container header">
         <div className="header-content">
           <img src={logo} className="logo-img" alt="logo" />
@@ -69,80 +83,46 @@ const LoginPage = () => {
           </div>
 
           <div className="col-lg-5 col-md-12">
-            <div className="login-mode-tabs" role="tablist" aria-label="Login type">
+            <div className="login-card">
+              <h4 className="text-center mb-4">Login Here</h4>
+
+              <input
+                type="email"
+                className="form-control mb-3"
+                placeholder="Email ID"
+                value={email}
+                onChange={(e) => setEmail(e.target.value)}
+              />
+
+              <div className="input-group mb-3">
+                <input
+                  type={showPassword ? "text" : "password"}
+                  className="form-control"
+                  placeholder="Password"
+                  value={password}
+                  onChange={(e) => setPassword(e.target.value)}
+                />
+
+                <span
+                  className="input-group-text"
+                  style={{ cursor: "pointer" }}
+                  onClick={() => setShowPassword(!showPassword)}
+                >
+                  {showPassword ? (
+                    <i className="bi bi-eye-slash" />
+                  ) : (
+                    <i className="bi bi-eye" />
+                  )}
+                </span>
+              </div>
+
               <button
-                type="button"
-                role="tab"
-                aria-selected={mode === LOGIN_MODES.MESS}
-                className={`login-mode-tab${
-                  mode === LOGIN_MODES.MESS ? " login-mode-tab--active" : ""
-                }`}
-                onClick={() => setMode(LOGIN_MODES.MESS)}
+                className="btn btn-primary w-100"
+                onClick={handleMessLogin}
               >
-                Mess login
-              </button>
-              <button
-                type="button"
-                role="tab"
-                aria-selected={mode === LOGIN_MODES.ADMIN}
-                className={`login-mode-tab${
-                  mode === LOGIN_MODES.ADMIN ? " login-mode-tab--active" : ""
-                }`}
-                onClick={() => setMode(LOGIN_MODES.ADMIN)}
-              >
-                Admin login
+                Login
               </button>
             </div>
-
-            {mode === LOGIN_MODES.MESS ? (
-              <div className="login-card">
-                <h4 className="text-center mb-4">Login Here</h4>
-
-                <input
-                  type="email"
-                  className="form-control mb-3"
-                  placeholder="Email ID"
-                  value={email}
-                  onChange={(e) => setEmail(e.target.value)}
-                />
-
-                <div className="input-group mb-3">
-                  <input
-                    type={showPassword ? "text" : "password"}
-                    className="form-control"
-                    placeholder="Password"
-                    value={password}
-                    onChange={(e) => setPassword(e.target.value)}
-                  />
-
-                  <span
-                    className="input-group-text"
-                    style={{ cursor: "pointer" }}
-                    onClick={() => setShowPassword(!showPassword)}
-                  >
-                    {showPassword ? (
-                      <i className="bi bi-eye-slash"></i>
-                    ) : (
-                      <i className="bi bi-eye"></i>
-                    )}
-                  </span>
-                </div>
-
-                <button
-                  className="btn btn-primary w-100"
-                  onClick={handleMessLogin}
-                >
-                  Login
-                </button>
-              </div>
-            ) : (
-              <div className="login-admin-panel">
-                <LoveAdminLoginScreen
-                  embedded
-                  onLogin={handleAdminLogin}
-                />
-              </div>
-            )}
           </div>
         </div>
       </div>
