@@ -20,6 +20,22 @@
   padding: 24px;
 }
 
+.la-login-bg--embedded {
+  min-height: auto;
+  padding: 20px 16px 24px;
+  background: linear-gradient(135deg, #1a0035 0%, #2d0050 100%);
+}
+
+.la-login-bg--embedded .la-login-card {
+  width: 100%;
+  max-width: none;
+  margin: 0;
+}
+
+.la-login-bg--embedded .la-login-title {
+  font-size: 1.35rem;
+}
+
 .la-floating-bg {
   position: fixed;
   inset: 0;

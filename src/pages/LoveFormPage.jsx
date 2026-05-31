@@ -235,7 +235,10 @@ const ReadOnlyAnswers = ({
   });
   const [searchQuery, setSearchQuery] = useState("");
   const [visibleCount, setVisibleCount] = useState({});
-  const effectiveAnswers = response?.answers || savedAnswers || {};
+  const effectiveAnswers = useMemo(
+    () => response?.answers || savedAnswers || {},
+    [response?.answers, savedAnswers],
+  );
   const pendingExtraQuestion = findPendingExtraQuestion(response);
   const extraQuestions = normalizeExtraQuestions(response?.extraQuestions);
   const trimmedSearch = searchQuery.trim().toLowerCase();
