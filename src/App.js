@@ -10,6 +10,8 @@ import Maintenance from "./pages/Maintenance";
 import RoomRent from "./pages/RoomRent";
 import Food from "./pages/Food";
 import PeriodPage from "./pages/PeriodPage";
+import LoveFormPage from "./pages/LoveFormPage";
+import LoveAdminPage from "./pages/LoveAdminPage";
 // import PaperAssignment from "./pages/PaperAssignment";
 
 function App() {
@@ -25,6 +27,8 @@ function App() {
         <Route path="/maintenance" element={<Maintenance />} />
         <Route path="/food" element={<Food />} />
         <Route path="/period" element={<PeriodPage />} />
+        <Route path="/love-form" element={<LoveFormPage />} />
+        <Route path="/love-admin" element={<LoveAdminPage />} />
         {/* <Route path="/paper-assignment" element={<PaperAssignment />} /> */}
       </Routes>
     </BrowserRouter>

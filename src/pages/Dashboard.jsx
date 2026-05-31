@@ -1,18 +1,51 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
 import "../styles/dashboard.css";
 
 import logo from "../assets/Photo-1.jpeg";
 
 import { signOut } from "firebase/auth";
-import { auth } from "../services/firebase";
+import { ref, onValue } from "firebase/database";
+import { auth, db } from "../services/firebase";
 import { useNavigate } from "react-router-dom";
+import {
+  LOVE_ADMIN_REPLY_SEEN_KEY,
+  LOVE_RESPONSES_PATH,
+  getLatestAdminActivityFromResponses,
+} from "../services/loveFormHelpers";
 
 const Dashboard = () => {
   const navigate = useNavigate();
+  const [loveNotification, setLoveNotification] = useState(null);
 
   const handleLogout = async () => {
     await signOut(auth);
     navigate("/");
+  };
+
+  useEffect(() => {
+    const unsub = onValue(ref(db, LOVE_RESPONSES_PATH), (snapshot) => {
+      const latest = getLatestAdminActivityFromResponses(snapshot.val());
+      const seenAt = localStorage.getItem(LOVE_ADMIN_REPLY_SEEN_KEY);
+      if (
+        latest?.createdAt &&
+        (!seenAt || new Date(latest.createdAt) > new Date(seenAt))
+      ) {
+        setLoveNotification(latest);
+      } else {
+        setLoveNotification(null);
+      }
+    });
+    return () => unsub();
+  }, []);
+
+  const openLoveNotification = () => {
+    if (loveNotification?.createdAt) {
+      localStorage.setItem(
+        LOVE_ADMIN_REPLY_SEEN_KEY,
+        loveNotification.createdAt,
+      );
+    }
+    navigate("/love-form");
   };
 
   return (
@@ -34,6 +67,23 @@ const Dashboard = () => {
 
       {/* BODY */}
       <div className="container dashboard-body">
+        {loveNotification && (
+          <button
+            type="button"
+            className="love-reply-alert"
+            onClick={openLoveNotification}
+          >
+            <img src={logo} alt="Love reply notification" />
+            <span>
+              <strong>{loveNotification.title}</strong>
+              <small>
+                {loveNotification.type === "question"
+                  ? "A new question is waiting for your answer."
+                  : "Tap to read and reply in the love form."}
+              </small>
+            </span>
+          </button>
+        )}
         <div className="row g-4">
           {/* PERIOD COUNTER */}
           <div className="col-lg-4 col-md-6 col-12">
@@ -116,6 +166,36 @@ const Dashboard = () => {
                 onClick={() => navigate("/borrowers")}
               >
                 Open
+              </button>
+            </div>
+          </div>
+
+          {/* LOVE FORM */}
+          <div className="col-lg-4 col-md-6 col-12">
+            <div
+              className="dashboard-card"
+              style={{
+                background:
+                  "linear-gradient(135deg, #fff0f5 0%, #ffe4ef 100%)",
+                border: "1px solid #ffc1d8",
+              }}
+            >
+              <div style={{ fontSize: "1.8rem", marginBottom: "6px" }}>❤️</div>
+              <h5 style={{ color: "#c2185b" }}>Saishree Love Form</h5>
+              <p style={{ color: "#ad1457", fontSize: "0.85rem" }}>
+                A special questionnaire just for you 💌
+              </p>
+              <button
+                className="btn w-100 fw-semibold"
+                style={{
+                  background:
+                    "linear-gradient(135deg, #e91e63, #ad1457)",
+                  color: "white",
+                  border: "none",
+                }}
+                onClick={() => navigate("/love-form")}
+              >
+                Open ❤️
               </button>
             </div>
           </div>

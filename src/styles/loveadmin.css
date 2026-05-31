@@ -1,0 +1,937 @@
+/* =====================================================================
+   Love Form — Admin Panel Styles
+   ===================================================================== */
+
+* {
+  box-sizing: border-box;
+}
+
+/* ── Login Screen ──────────────────────────────────────────────────── */
+
+.la-login-bg {
+  min-height: 100vh;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: linear-gradient(135deg, #0d0020 0%, #2d0050 50%, #1a0035 100%);
+  font-family: "Segoe UI", sans-serif;
+  position: relative;
+  overflow: hidden;
+  padding: 24px;
+}
+
+.la-floating-bg {
+  position: fixed;
+  inset: 0;
+  pointer-events: none;
+  z-index: 0;
+}
+
+.la-float-item {
+  position: absolute;
+  left: var(--pos, 50%);
+  bottom: -40px;
+  font-size: 1.6rem;
+  opacity: 0;
+  animation: la-float-up 10s ease-in infinite;
+  animation-delay: var(--delay, 0s);
+}
+
+@keyframes la-float-up {
+  0% { opacity: 0; transform: translateY(0) scale(0.8); }
+  10% { opacity: 0.5; }
+  90% { opacity: 0.3; }
+  100% { opacity: 0; transform: translateY(-110vh) scale(1.1) rotate(15deg); }
+}
+
+.la-login-card {
+  position: relative;
+  z-index: 1;
+  background: rgba(255, 255, 255, 0.05);
+  border: 1px solid rgba(255, 255, 255, 0.12);
+  backdrop-filter: blur(16px);
+  border-radius: 24px;
+  padding: 48px 40px;
+  width: 100%;
+  max-width: 420px;
+  text-align: center;
+  box-shadow: 0 20px 60px rgba(0, 0, 0, 0.5);
+}
+
+.la-login-icon {
+  font-size: 3rem;
+  margin-bottom: 12px;
+}
+
+.la-login-title {
+  font-size: 1.8rem;
+  font-weight: 700;
+  color: #fff;
+  margin: 0 0 6px;
+}
+
+.la-login-sub {
+  font-size: 0.9rem;
+  color: rgba(255, 255, 255, 0.5);
+  margin: 0 0 32px;
+}
+
+.la-login-form {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+
+.la-field-group {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  text-align: left;
+}
+
+.la-label {
+  font-size: 0.82rem;
+  font-weight: 600;
+  color: rgba(255, 255, 255, 0.6);
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+}
+
+.la-input {
+  width: 100%;
+  padding: 12px 16px;
+  background: rgba(255, 255, 255, 0.08);
+  border: 1.5px solid rgba(255, 255, 255, 0.15);
+  border-radius: 10px;
+  color: #fff;
+  font-size: 1rem;
+  outline: none;
+  transition: border-color 0.2s, background 0.2s;
+}
+
+.la-input:focus {
+  border-color: #e91e63;
+  background: rgba(255, 255, 255, 0.12);
+}
+
+.la-input::placeholder {
+  color: rgba(255, 255, 255, 0.3);
+}
+
+.la-pass-wrap {
+  position: relative;
+}
+
+.la-pass-wrap .la-input {
+  padding-right: 44px;
+}
+
+.la-show-pass {
+  position: absolute;
+  right: 12px;
+  top: 50%;
+  transform: translateY(-50%);
+  background: none;
+  border: none;
+  cursor: pointer;
+  font-size: 1.1rem;
+  padding: 0;
+  line-height: 1;
+}
+
+.la-login-error {
+  background: rgba(244, 67, 54, 0.15);
+  border: 1px solid rgba(244, 67, 54, 0.4);
+  color: #ff6b6b;
+  padding: 10px 14px;
+  border-radius: 8px;
+  font-size: 0.9rem;
+  text-align: left;
+}
+
+.la-btn-login {
+  padding: 14px;
+  background: linear-gradient(135deg, #e91e63, #c2185b);
+  color: #fff;
+  border: none;
+  border-radius: 12px;
+  font-size: 1rem;
+  font-weight: 700;
+  cursor: pointer;
+  transition: transform 0.15s, box-shadow 0.15s;
+  margin-top: 4px;
+  letter-spacing: 0.03em;
+}
+
+.la-btn-login:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 8px 24px rgba(233, 30, 99, 0.4);
+}
+
+.la-btn-login:active {
+  transform: translateY(0);
+}
+
+/* ── Dashboard Layout ──────────────────────────────────────────────── */
+
+.la-dashboard {
+  min-height: 100vh;
+  background: #f5f5f5;
+  font-family: "Segoe UI", sans-serif;
+}
+
+/* ── Dashboard Header ──────────────────────────────────────────────── */
+
+.la-dashboard-header {
+  background: linear-gradient(135deg, #1a0008, #6a0032);
+  color: #fff;
+  padding: 20px 24px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 16px;
+  position: sticky;
+  top: 0;
+  z-index: 100;
+  box-shadow: 0 2px 20px rgba(0, 0, 0, 0.3);
+}
+
+.la-dashboard-title {
+  font-size: 1.4rem;
+  font-weight: 700;
+  margin: 0 0 2px;
+}
+
+.la-dashboard-subtitle {
+  font-size: 0.85rem;
+  color: rgba(255, 255, 255, 0.6);
+  margin: 0;
+}
+
+.la-btn-logout {
+  background: rgba(255, 255, 255, 0.12);
+  border: 1px solid rgba(255, 255, 255, 0.2);
+  color: #fff;
+  padding: 8px 16px;
+  border-radius: 8px;
+  font-size: 0.88rem;
+  cursor: pointer;
+  transition: background 0.2s;
+  white-space: nowrap;
+}
+
+.la-btn-logout:hover {
+  background: rgba(255, 255, 255, 0.2);
+}
+
+/* ── Search Bar ────────────────────────────────────────────────────── */
+
+.la-search-bar {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 14px 24px;
+  background: #fff;
+  border-bottom: 1px solid #e0e0e0;
+  position: sticky;
+  top: 68px;
+  z-index: 99;
+}
+
+.la-search-icon {
+  font-size: 1.1rem;
+  flex-shrink: 0;
+}
+
+.la-search-input {
+  flex: 1;
+  border: none;
+  outline: none;
+  font-size: 0.95rem;
+  color: #333;
+  background: transparent;
+}
+
+.la-search-input::placeholder {
+  color: #aaa;
+}
+
+.la-search-clear {
+  background: none;
+  border: none;
+  cursor: pointer;
+  color: #aaa;
+  font-size: 1rem;
+  padding: 2px 6px;
+  border-radius: 4px;
+  transition: color 0.2s;
+}
+
+.la-search-clear:hover {
+  color: #e91e63;
+}
+
+/* ── Stats Bar ─────────────────────────────────────────────────────── */
+
+.la-stats-bar {
+  display: flex;
+  gap: 1px;
+  background: #e91e63;
+  border-bottom: 2px solid #c2185b;
+}
+
+.la-stat-item {
+  flex: 1;
+  background: #fff;
+  padding: 12px 16px;
+  text-align: center;
+}
+
+.la-stat-num {
+  display: block;
+  font-size: 1.4rem;
+  font-weight: 700;
+  color: #e91e63;
+  line-height: 1;
+}
+
+.la-stat-label {
+  font-size: 0.72rem;
+  color: #888;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+}
+
+/* ── Responses List ────────────────────────────────────────────────── */
+
+.la-responses-list {
+  padding: 20px 16px;
+  max-width: 960px;
+  margin: 0 auto;
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+/* ── Loading / Empty States ────────────────────────────────────────── */
+
+.la-loading {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 12px;
+  padding: 60px 20px;
+  color: #888;
+  font-size: 1rem;
+}
+
+.la-loading-spinner {
+  width: 36px;
+  height: 36px;
+  border: 3px solid #f3c5d3;
+  border-top-color: #e91e63;
+  border-radius: 50%;
+  animation: la-spin 0.8s linear infinite;
+}
+
+@keyframes la-spin {
+  to { transform: rotate(360deg); }
+}
+
+.la-empty-state {
+  text-align: center;
+  padding: 60px 20px;
+  color: #999;
+}
+
+.la-empty-icon {
+  font-size: 3rem;
+  margin-bottom: 12px;
+}
+
+.la-empty-state h3 {
+  margin: 0 0 8px;
+  color: #555;
+  font-size: 1.1rem;
+}
+
+.la-empty-state p {
+  margin: 0;
+  font-size: 0.9rem;
+}
+
+/* ── Response Card ─────────────────────────────────────────────────── */
+
+.la-response-card {
+  background: #fff;
+  border-radius: 14px;
+  box-shadow: 0 2px 12px rgba(0, 0, 0, 0.08);
+  overflow: hidden;
+  border: 1.5px solid #f0d6e0;
+  transition: box-shadow 0.2s;
+}
+
+.la-response-card--open {
+  box-shadow: 0 4px 24px rgba(233, 30, 99, 0.15);
+  border-color: #e91e63;
+}
+
+.la-response-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 16px 20px;
+  cursor: pointer;
+  background: linear-gradient(135deg, #fff5f8, #fff);
+  gap: 12px;
+  flex-wrap: wrap;
+  transition: background 0.2s;
+}
+
+.la-response-header:hover {
+  background: linear-gradient(135deg, #fce4ec, #fff5f8);
+}
+
+.la-response-meta {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.la-response-num {
+  font-size: 0.75rem;
+  font-weight: 700;
+  color: #aaa;
+  background: #f5f5f5;
+  padding: 3px 8px;
+  border-radius: 20px;
+}
+
+.la-response-icon {
+  font-size: 1.3rem;
+}
+
+.la-response-info {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+}
+
+.la-response-date {
+  font-size: 0.9rem;
+  font-weight: 600;
+  color: #333;
+}
+
+.la-response-count {
+  font-size: 0.78rem;
+  color: #888;
+}
+
+.la-response-header-actions {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  flex-shrink: 0;
+}
+
+.la-confirm-delete {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  background: #fff3f3;
+  border: 1px solid #ffcdd2;
+  border-radius: 8px;
+  padding: 6px 12px;
+  font-size: 0.82rem;
+  color: #c62828;
+}
+
+.la-btn-yes-delete {
+  background: #e53935;
+  color: #fff;
+  border: none;
+  border-radius: 6px;
+  padding: 5px 10px;
+  font-size: 0.8rem;
+  cursor: pointer;
+  font-weight: 600;
+  transition: background 0.2s;
+}
+
+.la-btn-yes-delete:hover {
+  background: #b71c1c;
+}
+
+.la-btn-cancel {
+  background: none;
+  border: 1px solid #ddd;
+  border-radius: 6px;
+  padding: 5px 10px;
+  font-size: 0.8rem;
+  cursor: pointer;
+  color: #555;
+  transition: background 0.2s;
+}
+
+.la-btn-cancel:hover {
+  background: #f5f5f5;
+}
+
+.la-btn-delete {
+  background: none;
+  border: 1.5px solid #ffcdd2;
+  color: #e53935;
+  border-radius: 8px;
+  padding: 7px 14px;
+  font-size: 0.82rem;
+  cursor: pointer;
+  font-weight: 600;
+  transition: background 0.2s, border-color 0.2s;
+}
+
+.la-btn-delete:hover {
+  background: #ffebee;
+  border-color: #e53935;
+}
+
+.la-expand-arrow {
+  font-size: 0.8rem;
+  color: #bbb;
+  user-select: none;
+}
+
+/* ── Response Body ─────────────────────────────────────────────────── */
+
+.la-response-body {
+  border-top: 1px solid #f0d6e0;
+  padding: 0;
+}
+
+/* ── Section Block ─────────────────────────────────────────────────── */
+
+.la-section-block {
+  border-bottom: 1px solid #f5f5f5;
+}
+
+.la-section-block:last-child {
+  border-bottom: none;
+}
+
+.la-admin-top-panel {
+  background: #f6fffb;
+  border-bottom: 2px solid #c8e6c9;
+}
+
+.la-admin-top-head {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 14px 20px 10px;
+  background: #eefaf3;
+  font-weight: 700;
+  font-size: 0.92rem;
+  color: #1b5e20;
+}
+
+.la-admin-top-title {
+  flex: 1;
+}
+
+.la-add-question--top {
+  border-bottom: 1px solid #dcedc8;
+  background: #fff;
+}
+
+.la-add-question-label {
+  font-size: 0.82rem;
+  font-weight: 700;
+  color: #2e7d32;
+}
+
+.la-admin-qa-toggle {
+  background: #eefaf3;
+}
+
+.la-form-sections-label {
+  padding: 10px 20px;
+  font-size: 0.75rem;
+  font-weight: 700;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  color: #999;
+  background: #fafafa;
+  border-bottom: 1px solid #eee;
+}
+
+.la-admin-section-empty {
+  margin: 0;
+  padding: 14px 20px;
+  font-size: 0.85rem;
+  color: #666;
+  line-height: 1.5;
+  border-top: 1px solid #e8f5e9;
+}
+
+.la-section-toggle-btn {
+  width: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 12px 20px;
+  background: #fafafa;
+  border: none;
+  cursor: pointer;
+  text-align: left;
+  font-size: 0.9rem;
+  font-weight: 600;
+  color: #333;
+  transition: background 0.15s;
+}
+
+.la-section-toggle-btn:hover {
+  background: #f5f0f8;
+}
+
+.la-section-label {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.la-section-emoji {
+  font-size: 1rem;
+}
+
+.la-section-name {
+  font-size: 0.88rem;
+}
+
+.la-section-answered-count {
+  font-size: 0.75rem;
+  color: #aaa;
+  font-weight: 400;
+}
+
+/* ── Q&A List ──────────────────────────────────────────────────────── */
+
+.la-qa-list {
+  padding: 0;
+}
+
+.la-qa-row {
+  display: flex;
+  gap: 12px;
+  padding: 14px 20px;
+  border-top: 1px solid #f5f5f5;
+  align-items: flex-start;
+}
+
+.la-qa-row:first-child {
+  border-top: none;
+}
+
+.la-qa-left {
+  flex-shrink: 0;
+  padding-top: 2px;
+}
+
+.la-qa-num {
+  font-size: 0.75rem;
+  font-weight: 700;
+  min-width: 28px;
+  display: inline-block;
+}
+
+.la-qa-right {
+  flex: 1;
+  min-width: 0;
+}
+
+.la-q-text {
+  font-size: 0.88rem;
+  font-weight: 600;
+  color: #333;
+  margin-bottom: 6px;
+  line-height: 1.45;
+}
+
+.la-a-row {
+  display: flex;
+  align-items: flex-start;
+  gap: 8px;
+}
+
+.la-a-text {
+  flex: 1;
+  font-size: 0.9rem;
+  color: #444;
+  line-height: 1.55;
+  white-space: pre-wrap;
+  word-break: break-word;
+  background: #fafafa;
+  border: 1px solid #eee;
+  border-radius: 8px;
+  padding: 8px 12px;
+}
+
+.la-a-empty {
+  color: #bbb;
+  font-style: italic;
+  border-style: dashed;
+}
+
+.la-inline-edit-btn {
+  background: none;
+  border: 1px solid #e0e0e0;
+  border-radius: 6px;
+  padding: 5px 8px;
+  cursor: pointer;
+  font-size: 0.85rem;
+  color: #888;
+  transition: background 0.2s, border-color 0.2s, color 0.2s;
+  flex-shrink: 0;
+  line-height: 1;
+}
+
+.la-inline-edit-btn:hover {
+  background: #fce4ec;
+  border-color: #e91e63;
+  color: #e91e63;
+}
+
+.la-reply-btn {
+  margin-top: 8px;
+  padding: 7px 12px;
+  font-weight: 700;
+  color: #ad1457;
+  background: #fff7fb;
+}
+
+.la-chat-thread {
+  margin-top: 10px;
+  display: flex;
+  flex-direction: column;
+  gap: 7px;
+  animation: la-chat-in 0.35s ease both;
+}
+
+@keyframes la-chat-in {
+  from {
+    opacity: 0;
+    transform: translateY(8px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.la-chat-head {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 8px;
+  font-size: 0.76rem;
+  font-weight: 800;
+  color: #ad1457;
+  text-transform: uppercase;
+}
+
+.la-delete-chat-btn {
+  border: 1px solid #ffcdd2;
+  background: #fff3f3;
+  color: #c62828;
+  border-radius: 7px;
+  padding: 4px 8px;
+  font-size: 0.74rem;
+  cursor: pointer;
+  text-transform: none;
+  font-weight: 700;
+}
+
+.la-chat-bubble {
+  width: fit-content;
+  max-width: 92%;
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+  border-radius: 10px;
+  padding: 8px 10px;
+  font-size: 0.86rem;
+  line-height: 1.45;
+  white-space: pre-wrap;
+  word-break: break-word;
+}
+
+.la-chat-bubble--admin {
+  background: #fff3f8;
+  border: 1px solid #ffc1d8;
+  color: #6a0032;
+}
+
+.la-chat-bubble--user {
+  align-self: flex-end;
+  background: #ecfbf6;
+  border: 1px solid #bdeee0;
+  color: #1f5c50;
+}
+
+.la-chat-sender {
+  font-size: 0.68rem;
+  font-weight: 800;
+  opacity: 0.72;
+  text-transform: uppercase;
+}
+
+.la-reply-editor {
+  margin-top: 10px;
+}
+
+.la-add-question {
+  padding: 14px 20px;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  border-bottom: 1px solid #f5f5f5;
+}
+
+.la-add-question .la-btn-save {
+  align-self: flex-start;
+  background: #00a884;
+}
+
+/* ── Edit Block ────────────────────────────────────────────────────── */
+
+.la-edit-block {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.la-edit-textarea,
+.la-edit-input-field {
+  width: 100%;
+  padding: 10px 12px;
+  border: 2px solid #e91e63;
+  border-radius: 8px;
+  font-size: 0.9rem;
+  font-family: inherit;
+  color: #333;
+  outline: none;
+  resize: vertical;
+  background: #fff;
+  line-height: 1.5;
+  transition: border-color 0.2s;
+}
+
+.la-edit-textarea:focus,
+.la-edit-input-field:focus {
+  box-shadow: 0 0 0 3px rgba(233, 30, 99, 0.12);
+}
+
+.la-edit-actions {
+  display: flex;
+  gap: 8px;
+  align-items: center;
+}
+
+.la-btn-save {
+  padding: 8px 16px;
+  border: none;
+  border-radius: 8px;
+  color: #fff;
+  font-size: 0.85rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: opacity 0.2s, transform 0.15s;
+}
+
+.la-btn-save:hover:not(:disabled) {
+  opacity: 0.88;
+  transform: translateY(-1px);
+}
+
+.la-btn-save:disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
+}
+
+.la-btn-cancel-edit {
+  padding: 8px 14px;
+  background: none;
+  border: 1.5px solid #ddd;
+  border-radius: 8px;
+  color: #666;
+  font-size: 0.85rem;
+  cursor: pointer;
+  transition: background 0.2s;
+}
+
+.la-btn-cancel-edit:hover {
+  background: #f5f5f5;
+}
+
+/* ── Responsive ────────────────────────────────────────────────────── */
+
+@media (max-width: 600px) {
+  .la-login-card {
+    padding: 32px 24px;
+  }
+
+  .la-dashboard-header {
+    padding: 14px 16px;
+  }
+
+  .la-dashboard-title {
+    font-size: 1.1rem;
+  }
+
+  .la-responses-list {
+    padding: 12px 8px;
+  }
+
+  .la-response-header {
+    padding: 12px 14px;
+  }
+
+  .la-qa-row {
+    padding: 12px 14px;
+  }
+
+  .la-stats-bar {
+    flex-wrap: wrap;
+  }
+
+  .la-stat-item {
+    min-width: 33%;
+  }
+
+  .la-confirm-delete {
+    flex-wrap: wrap;
+    gap: 6px;
+  }
+
+  .la-chat-head {
+    align-items: flex-start;
+    flex-direction: column;
+  }
+
+  .la-add-question {
+    padding: 12px 14px;
+  }
+}
+
+.la-image-answers {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+}
+
+.la-admin-thumb {
+  width: 64px;
+  height: 64px;
+  object-fit: cover;
+  border-radius: 8px;
+  border: 1px solid #eee;
+}

@@ -1,0 +1,1708 @@
+/* =====================================================================
+   Love Form — Beautiful Rose/Love Theme
+   ===================================================================== */
+
+/* ── Base ─────────────────────────────────────────────────────────── */
+
+* {
+  box-sizing: border-box;
+}
+
+.lf-fullscreen {
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: flex-start;
+  padding: 0 16px 40px;
+  position: relative;
+  overflow-x: hidden;
+  font-family: "Segoe UI", "Georgia", sans-serif;
+}
+
+/* ── Backgrounds ──────────────────────────────────────────────────── */
+
+.lf-cover-bg {
+  background: linear-gradient(135deg, #1a0008 0%, #4a0020 40%, #8b0038 100%);
+}
+
+.lf-question-bg {
+  background:
+    linear-gradient(155deg, #fff4fa 0%, #fff9ed 42%, #effbf7 100%),
+    repeating-linear-gradient(45deg, rgba(233, 30, 99, 0.05) 0 1px, transparent 1px 18px);
+  overflow: hidden;
+}
+
+.lf-question-bg::before,
+.lf-question-bg::after {
+  content: "";
+  position: fixed;
+  pointer-events: none;
+  z-index: 0;
+}
+
+.lf-question-bg::before {
+  inset: -18%;
+  background-image:
+    linear-gradient(
+      115deg,
+      transparent 0 18%,
+      rgba(255, 64, 129, 0.08) 18% 20%,
+      transparent 20% 44%,
+      rgba(0, 168, 132, 0.07) 44% 46%,
+      transparent 46% 72%,
+      rgba(255, 179, 0, 0.07) 72% 74%,
+      transparent 74% 100%
+    ),
+    url("data:image/svg+xml,%3Csvg width='150' height='150' viewBox='0 0 150 150' xmlns='http://www.w3.org/2000/svg'%3E%3Cg fill='none' fill-rule='evenodd'%3E%3Cpath d='M75 101c-2-2-33-22-33-43 0-12 9-22 21-22 6 0 11 3 15 8 4-5 9-8 15-8 12 0 21 10 21 22 0 21-31 41-33 43-2 1-4 1-6 0z' fill='%23e91e63' fill-opacity='.075'/%3E%3Cpath d='M28 119c-1-1-15-10-15-20 0-6 4-10 9-10 3 0 5 1 7 4 2-3 4-4 7-4 5 0 9 4 9 10 0 10-14 19-15 20-1 1-1 1-2 0z' fill='%2300a884' fill-opacity='.075'/%3E%3C/g%3E%3C/svg%3E");
+  background-size: 320px 320px, 150px 150px;
+  opacity: 0.95;
+  animation: lf-love-bg-drift 24s linear infinite;
+}
+
+.lf-question-bg::after {
+  inset: 0;
+  background:
+    linear-gradient(
+      105deg,
+      transparent 0%,
+      transparent 26%,
+      rgba(255, 255, 255, 0.58) 36%,
+      rgba(255, 255, 255, 0.08) 44%,
+      transparent 56%,
+      transparent 100%
+    );
+  background-size: 230% 100%;
+  mix-blend-mode: soft-light;
+  opacity: 0.75;
+  animation: lf-love-satin 8s ease-in-out infinite;
+}
+
+@keyframes lf-love-bg-drift {
+  from {
+    transform: translate3d(0, 0, 0) rotate(0deg);
+  }
+  to {
+    transform: translate3d(-72px, 72px, 0) rotate(1deg);
+  }
+}
+
+@keyframes lf-love-satin {
+  0%, 100% {
+    background-position: 120% 0;
+  }
+  50% {
+    background-position: -20% 0;
+  }
+}
+
+.lf-submit-bg {
+  background: linear-gradient(135deg, #1a0008 0%, #4a0020 100%);
+}
+
+.lf-thankyou-bg {
+  background: linear-gradient(135deg, #0d001a 0%, #3a0050 50%, #7b0080 100%);
+}
+
+/* ── Floating Hearts Background ───────────────────────────────────── */
+
+.lf-floating-hearts-bg {
+  position: fixed;
+  inset: 0;
+  pointer-events: none;
+  z-index: 0;
+}
+
+.lf-bg-heart {
+  position: absolute;
+  left: var(--pos, 50%);
+  bottom: -40px;
+  font-size: 1.4rem;
+  opacity: 0;
+  animation: lf-float-up 8s ease-in infinite;
+  animation-delay: var(--delay, 0s);
+}
+
+@keyframes lf-float-up {
+  0% {
+    opacity: 0;
+    transform: translateY(0) scale(0.8);
+  }
+  10% {
+    opacity: 0.6;
+  }
+  90% {
+    opacity: 0.4;
+  }
+  100% {
+    opacity: 0;
+    transform: translateY(-110vh) scale(1.1) rotate(20deg);
+  }
+}
+
+/* ── Top Navigation Bar ───────────────────────────────────────────── */
+
+.lf-top-bar {
+  width: 100%;
+  max-width: 740px;
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  padding: 18px 0 10px;
+  position: sticky;
+  top: 0;
+  z-index: 10;
+  background: transparent;
+}
+
+.lf-back-icon {
+  background: rgba(255, 255, 255, 0.9);
+  border: none;
+  border-radius: 50%;
+  width: 40px;
+  height: 40px;
+  font-size: 1.1rem;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.15);
+  flex-shrink: 0;
+  transition: transform 0.2s, box-shadow 0.2s;
+  color: #333;
+}
+
+.lf-back-icon:hover {
+  transform: scale(1.08);
+  box-shadow: 0 4px 14px rgba(0, 0, 0, 0.22);
+}
+
+.lf-progress-wrap {
+  flex: 1;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.lf-progress-bar {
+  flex: 1;
+  height: 6px;
+  background: rgba(255, 255, 255, 0.25);
+  border-radius: 99px;
+  overflow: hidden;
+}
+
+.lf-question-bg .lf-progress-bar {
+  background: #e0e0e0;
+}
+
+.lf-progress-fill {
+  height: 100%;
+  background: #e91e63;
+  border-radius: 99px;
+  transition: width 0.5s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.lf-progress-label {
+  font-size: 0.8rem;
+  font-weight: 700;
+  color: rgba(255, 255, 255, 0.9);
+  min-width: 34px;
+  text-align: right;
+}
+
+.lf-question-bg .lf-progress-label {
+  color: #666;
+}
+
+/* ── Cover Card ───────────────────────────────────────────────────── */
+
+.lf-cover-card {
+  position: relative;
+  z-index: 1;
+  width: 100%;
+  max-width: 680px;
+  background: rgba(255, 255, 255, 0.06);
+  backdrop-filter: blur(16px);
+  border: 1px solid rgba(255, 255, 255, 0.15);
+  border-radius: 28px;
+  padding: 44px 40px;
+  margin-top: 20px;
+  text-align: center;
+  color: white;
+  box-shadow: 0 24px 80px rgba(0, 0, 0, 0.4);
+  animation: lf-fade-in 0.7s ease;
+}
+
+.lf-cover-emoji {
+  font-size: 4rem;
+  margin-bottom: 16px;
+  animation: lf-pulse-heart 1.5s ease-in-out infinite;
+}
+
+@keyframes lf-pulse-heart {
+  0%, 100% { transform: scale(1); }
+  50% { transform: scale(1.12); }
+}
+
+.lf-cover-title {
+  font-size: clamp(1.5rem, 4vw, 2.4rem);
+  font-weight: 700;
+  margin: 0 0 20px;
+  letter-spacing: 0.5px;
+  text-shadow: 0 2px 12px rgba(0, 0, 0, 0.3);
+}
+
+.lf-cover-desc-scroll {
+  max-height: 280px;
+  overflow-y: auto;
+  text-align: left;
+  font-size: 0.92rem;
+  line-height: 1.75;
+  color: rgba(255, 255, 255, 0.88);
+  padding-right: 8px;
+  scrollbar-width: thin;
+  scrollbar-color: rgba(255,255,255,0.3) transparent;
+  margin-bottom: 24px;
+}
+
+.lf-cover-desc-line {
+  margin: 4px 0;
+}
+
+.lf-cover-meta {
+  display: flex;
+  gap: 10px;
+  justify-content: center;
+  flex-wrap: wrap;
+  margin-bottom: 28px;
+}
+
+.lf-badge {
+  background: rgba(255, 255, 255, 0.18);
+  border: 1px solid rgba(255, 255, 255, 0.3);
+  border-radius: 99px;
+  padding: 5px 14px;
+  font-size: 0.8rem;
+  font-weight: 600;
+  color: white;
+}
+
+.lf-btn-start {
+  background: linear-gradient(135deg, #ff4081, #e91e63);
+  color: white;
+  border: none;
+  border-radius: 99px;
+  padding: 15px 48px;
+  font-size: 1.1rem;
+  font-weight: 700;
+  cursor: pointer;
+  letter-spacing: 0.5px;
+  box-shadow: 0 8px 28px rgba(233, 30, 99, 0.5);
+  transition: transform 0.2s, box-shadow 0.2s;
+}
+
+.lf-btn-start:hover {
+  transform: translateY(-2px) scale(1.03);
+  box-shadow: 0 12px 36px rgba(233, 30, 99, 0.65);
+}
+
+/* ── Section Intro Card ───────────────────────────────────────────── */
+
+.lf-section-card {
+  width: 100%;
+  max-width: 680px;
+  background: rgba(255, 255, 255, 0.1);
+  backdrop-filter: blur(18px);
+  border: 1px solid rgba(255, 255, 255, 0.2);
+  border-radius: 28px;
+  padding: 44px 40px;
+  margin-top: 16px;
+  color: white;
+  box-shadow: 0 24px 70px rgba(0, 0, 0, 0.3);
+  max-height: 72vh;
+  overflow-y: auto;
+  scrollbar-width: thin;
+  scrollbar-color: rgba(255,255,255,0.3) transparent;
+}
+
+.lf-section-emoji {
+  font-size: 3.5rem;
+  margin-bottom: 14px;
+}
+
+.lf-section-title {
+  font-size: clamp(1.3rem, 4vw, 2rem);
+  font-weight: 700;
+  margin: 0 0 8px;
+}
+
+.lf-section-subtitle {
+  font-size: 0.95rem;
+  opacity: 0.85;
+  margin: 0 0 20px;
+  line-height: 1.5;
+}
+
+.lf-section-intro-text {
+  background: rgba(0, 0, 0, 0.2);
+  border-radius: 14px;
+  padding: 18px 20px;
+  font-size: 0.88rem;
+  line-height: 1.85;
+  color: rgba(255, 255, 255, 0.92);
+  margin-bottom: 20px;
+  white-space: pre-wrap;
+  text-align: left;
+}
+
+.lf-section-intro-text p {
+  margin: 3px 0;
+}
+
+.lf-section-qcount {
+  font-size: 0.82rem;
+  opacity: 0.75;
+  margin-bottom: 22px;
+  font-style: italic;
+}
+
+.lf-btn-section-start {
+  background: rgba(255, 255, 255, 0.95);
+  color: #333;
+  border: none;
+  border-radius: 99px;
+  padding: 13px 42px;
+  font-size: 1rem;
+  font-weight: 700;
+  cursor: pointer;
+  transition: transform 0.2s, box-shadow 0.2s;
+  box-shadow: 0 6px 22px rgba(0, 0, 0, 0.2);
+}
+
+.lf-btn-section-start:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.28);
+}
+
+/* ── Question Section Badge ───────────────────────────────────────── */
+
+.lf-question-section-badge {
+  position: relative;
+  z-index: 1;
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  font-size: 0.82rem;
+  font-weight: 700;
+  letter-spacing: 0.4px;
+  text-transform: uppercase;
+  margin-top: 8px;
+  width: 100%;
+  max-width: 680px;
+  padding: 9px 12px;
+  color: var(--accent, #e91e63);
+  background: rgba(255, 255, 255, 0.68);
+  border: 1px solid rgba(233, 30, 99, 0.12);
+  border-radius: 16px;
+  box-shadow: 0 10px 28px rgba(173, 20, 87, 0.08);
+  backdrop-filter: blur(12px);
+}
+
+.lf-q-in-section {
+  margin-left: auto;
+  background: rgba(233, 30, 99, 0.1);
+  border-radius: 99px;
+  padding: 2px 10px;
+  font-size: 0.75rem;
+}
+
+/* ── Question Card ────────────────────────────────────────────────── */
+
+.lf-question-card {
+  position: relative;
+  z-index: 1;
+  width: 100%;
+  max-width: 680px;
+  background:
+    linear-gradient(#fff, #fff) padding-box,
+    linear-gradient(135deg, rgba(233, 30, 99, 0.44), rgba(255, 179, 0, 0.34), rgba(0, 168, 132, 0.36)) border-box;
+  border-radius: 24px;
+  padding: 38px 40px 32px;
+  margin-top: 16px;
+  overflow: hidden;
+  border: 1.5px solid transparent;
+  box-shadow:
+    0 18px 54px rgba(173, 20, 87, 0.16),
+    0 8px 28px rgba(0, 168, 132, 0.08);
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  animation: lf-question-card-glow 5s ease-in-out infinite;
+}
+
+.lf-question-card::before {
+  content: "";
+  position: absolute;
+  inset: 0 0 auto;
+  height: 6px;
+  background: linear-gradient(90deg, #e91e63, #ffb300, #00a884, #e91e63);
+  background-size: 220% 100%;
+  animation: lf-love-border-flow 5s linear infinite;
+}
+
+.lf-question-card::after {
+  content: "♡";
+  position: absolute;
+  right: 24px;
+  top: 22px;
+  color: rgba(233, 30, 99, 0.09);
+  font-size: 4.8rem;
+  line-height: 1;
+  transform: rotate(-12deg);
+  pointer-events: none;
+  animation: lf-watermark-heart 4s ease-in-out infinite;
+}
+
+.lf-question-card > * {
+  position: relative;
+  z-index: 1;
+}
+
+@keyframes lf-question-card-glow {
+  0%, 100% {
+    box-shadow:
+      0 18px 54px rgba(173, 20, 87, 0.16),
+      0 8px 28px rgba(0, 168, 132, 0.08);
+  }
+  50% {
+    box-shadow:
+      0 24px 68px rgba(173, 20, 87, 0.22),
+      0 10px 36px rgba(0, 168, 132, 0.12);
+  }
+}
+
+@keyframes lf-love-border-flow {
+  from {
+    background-position: 0% 0;
+  }
+  to {
+    background-position: 220% 0;
+  }
+}
+
+@keyframes lf-watermark-heart {
+  0%, 100% {
+    opacity: 0.45;
+    transform: rotate(-12deg) scale(1);
+  }
+  50% {
+    opacity: 0.8;
+    transform: rotate(-8deg) scale(1.06);
+  }
+}
+
+.lf-question-love-layer {
+  position: fixed;
+  inset: 0;
+  pointer-events: none;
+  z-index: 0;
+  overflow: hidden;
+  background-image:
+    linear-gradient(90deg, rgba(255,255,255,0.24) 1px, transparent 1px),
+    linear-gradient(180deg, rgba(255,255,255,0.18) 1px, transparent 1px);
+  background-size: 42px 42px;
+  mask-image: linear-gradient(to bottom, transparent 0%, #000 14%, #000 82%, transparent 100%);
+  -webkit-mask-image: linear-gradient(to bottom, transparent 0%, #000 14%, #000 82%, transparent 100%);
+  animation: lf-love-grid-drift 18s linear infinite;
+}
+
+.lf-love-petal {
+  position: absolute;
+  left: var(--pos, 50%);
+  top: -34px;
+  color: rgba(194, 24, 91, 0.34);
+  font-size: clamp(1rem, 2.8vw, 1.45rem);
+  text-shadow: 0 8px 18px rgba(194, 24, 91, 0.16);
+  animation: lf-love-fall 8.5s ease-in-out infinite;
+  animation-delay: var(--delay, 0s);
+}
+
+@keyframes lf-love-fall {
+  0% {
+    opacity: 0;
+    transform: translate3d(0, -20px, 0) rotate(0deg) scale(0.8);
+  }
+  18% {
+    opacity: 0.8;
+  }
+  100% {
+    opacity: 0;
+    transform: translate3d(24px, 105vh, 0) rotate(120deg) scale(1.05);
+  }
+}
+
+@keyframes lf-love-grid-drift {
+  from {
+    background-position: 0 0, 0 0;
+  }
+  to {
+    background-position: 42px 84px, 42px 84px;
+  }
+}
+
+.lf-q-number {
+  font-size: 0.78rem;
+  font-weight: 800;
+  letter-spacing: 1px;
+  text-transform: uppercase;
+  margin-bottom: 18px;
+  color: var(--accent, #e91e63);
+}
+
+.lf-required-dot {
+  color: #e91e63;
+  font-size: 1.2rem;
+  vertical-align: middle;
+}
+
+.lf-q-text {
+  font-size: clamp(1.05rem, 2.5vw, 1.35rem);
+  font-weight: 600;
+  color: #1a1a1a;
+  line-height: 1.6;
+  margin: 0 0 28px;
+}
+
+/* ── Inputs ───────────────────────────────────────────────────────── */
+
+.lf-input-wrap {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.lf-input-short {
+  width: 100%;
+  border: none;
+  border-bottom: 2px solid #e0e0e0;
+  outline: none;
+  font-size: 1.1rem;
+  padding: 10px 4px;
+  color: #1a1a1a;
+  background: transparent;
+  transition: border-color 0.25s;
+  font-family: inherit;
+}
+
+.lf-input-short:focus {
+  border-bottom-color: var(--accent, #e91e63);
+}
+
+.lf-input-short::placeholder {
+  color: #bbb;
+  font-style: italic;
+}
+
+.lf-input-para {
+  width: 100%;
+  border: 1.5px solid #e8e8e8;
+  border-radius: 14px;
+  outline: none;
+  font-size: 1rem;
+  padding: 14px 16px;
+  color: #1a1a1a;
+  background: #fafafa;
+  resize: vertical;
+  min-height: 130px;
+  transition: border-color 0.25s, box-shadow 0.25s;
+  font-family: inherit;
+  line-height: 1.7;
+}
+
+.lf-input-para:focus {
+  border-color: var(--accent, #e91e63);
+  box-shadow: 0 0 0 3px rgba(233, 30, 99, 0.1);
+  background: white;
+}
+
+.lf-input-para::placeholder {
+  color: #bbb;
+  font-style: italic;
+}
+
+.lf-error {
+  color: #e53935;
+  font-size: 0.85rem;
+  font-weight: 500;
+  animation: lf-shake 0.3s ease;
+}
+
+@keyframes lf-shake {
+  0%, 100% { transform: translateX(0); }
+  25% { transform: translateX(-6px); }
+  75% { transform: translateX(6px); }
+}
+
+.lf-enter-hint {
+  font-size: 0.78rem;
+  color: #bbb;
+  margin-top: 6px;
+  font-style: italic;
+}
+
+/* ── Bottom Navigation ────────────────────────────────────────────── */
+
+.lf-nav-row {
+  position: relative;
+  z-index: 1;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  width: 100%;
+  max-width: 680px;
+  margin-top: 20px;
+  padding: 0 4px;
+}
+
+.lf-nav-btn {
+  width: 52px;
+  height: 52px;
+  border-radius: 50%;
+  border: none;
+  font-size: 1.3rem;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: transform 0.2s, box-shadow 0.2s, opacity 0.2s;
+  box-shadow: 0 4px 16px rgba(0, 0, 0, 0.15);
+}
+
+.lf-nav-prev {
+  background: #f0f0f0;
+  color: #555;
+}
+
+.lf-nav-prev:hover:not(:disabled) {
+  transform: scale(1.08);
+  box-shadow: 0 6px 20px rgba(0, 0, 0, 0.2);
+}
+
+.lf-nav-prev:disabled {
+  opacity: 0.35;
+  cursor: default;
+}
+
+.lf-nav-next {
+  background: #e91e63;
+  color: white;
+}
+
+.lf-nav-next:hover {
+  transform: scale(1.08);
+  box-shadow: 0 8px 24px rgba(233, 30, 99, 0.45);
+}
+
+.lf-q-counter {
+  font-size: 0.85rem;
+  color: #999;
+  font-weight: 600;
+}
+
+/* ── Submit Card ──────────────────────────────────────────────────── */
+
+.lf-submit-card {
+  position: relative;
+  z-index: 1;
+  width: 100%;
+  max-width: 600px;
+  background: rgba(255, 255, 255, 0.08);
+  backdrop-filter: blur(18px);
+  border: 1px solid rgba(255, 255, 255, 0.15);
+  border-radius: 28px;
+  padding: 48px 40px;
+  text-align: center;
+  color: white;
+  box-shadow: 0 24px 80px rgba(0, 0, 0, 0.4);
+  margin-top: 24px;
+  animation: lf-fade-in 0.6s ease;
+}
+
+.lf-big-emoji {
+  font-size: 4rem;
+  margin-bottom: 18px;
+  animation: lf-pulse-heart 2s ease-in-out infinite;
+}
+
+.lf-submit-title {
+  font-size: 2rem;
+  font-weight: 700;
+  margin: 0 0 14px;
+}
+
+.lf-submit-sub {
+  font-size: 0.97rem;
+  line-height: 1.7;
+  opacity: 0.9;
+  margin-bottom: 24px;
+}
+
+.lf-submit-notice {
+  background: rgba(255, 255, 255, 0.1);
+  border: 1px solid rgba(255, 255, 255, 0.2);
+  border-radius: 12px;
+  padding: 14px 18px;
+  display: flex;
+  gap: 10px;
+  align-items: flex-start;
+  font-size: 0.85rem;
+  line-height: 1.5;
+  text-align: left;
+  margin-bottom: 28px;
+}
+
+.lf-submit-error {
+  width: 100%;
+  max-width: 520px;
+  color: #b71c1c;
+  background: #ffebee;
+  border: 1px solid #ffcdd2;
+  border-radius: 10px;
+  padding: 10px 12px;
+  font-size: 0.86rem;
+  line-height: 1.45;
+}
+
+.lf-submit-actions {
+  display: flex;
+  gap: 14px;
+  justify-content: center;
+  flex-wrap: wrap;
+}
+
+.lf-btn-back-outline {
+  background: transparent;
+  border: 2px solid rgba(255, 255, 255, 0.6);
+  color: white;
+  border-radius: 99px;
+  padding: 12px 28px;
+  font-size: 0.9rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: background 0.2s, transform 0.2s;
+}
+
+.lf-btn-back-outline:hover {
+  background: rgba(255, 255, 255, 0.12);
+  transform: translateY(-1px);
+}
+
+.lf-btn-submit {
+  background: linear-gradient(135deg, #ff4081, #e91e63);
+  border: none;
+  color: white;
+  border-radius: 99px;
+  padding: 14px 36px;
+  font-size: 1rem;
+  font-weight: 700;
+  cursor: pointer;
+  box-shadow: 0 8px 28px rgba(233, 30, 99, 0.5);
+  transition: transform 0.2s, box-shadow 0.2s;
+}
+
+.lf-btn-submit:hover:not(:disabled) {
+  transform: translateY(-2px);
+  box-shadow: 0 12px 36px rgba(233, 30, 99, 0.65);
+}
+
+.lf-btn-submit:disabled {
+  opacity: 0.7;
+  cursor: default;
+}
+
+.lf-submitting {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+/* ── Thank You / Already Submitted ───────────────────────────────── */
+
+.lf-center-card {
+  position: relative;
+  z-index: 1;
+  width: 100%;
+  max-width: 560px;
+  background: rgba(255, 255, 255, 0.08);
+  backdrop-filter: blur(18px);
+  border: 1px solid rgba(255, 255, 255, 0.15);
+  border-radius: 28px;
+  padding: 52px 40px;
+  text-align: center;
+  color: white;
+  box-shadow: 0 24px 80px rgba(0, 0, 0, 0.45);
+  margin-top: 80px;
+  animation: lf-fade-in 0.7s ease;
+}
+
+.lf-ty-title {
+  font-size: 2rem;
+  font-weight: 700;
+  margin: 0 0 14px;
+}
+
+.lf-ty-sub {
+  font-size: 0.97rem;
+  line-height: 1.75;
+  opacity: 0.9;
+  margin-bottom: 18px;
+}
+
+.lf-ty-quote {
+  font-style: italic;
+  font-size: 0.9rem;
+  opacity: 0.75;
+  margin-bottom: 30px;
+  line-height: 1.6;
+}
+
+.lf-btn-primary {
+  background: linear-gradient(135deg, #ff4081, #e91e63);
+  border: none;
+  color: white;
+  border-radius: 99px;
+  padding: 13px 36px;
+  font-size: 0.97rem;
+  font-weight: 700;
+  cursor: pointer;
+  box-shadow: 0 8px 28px rgba(233, 30, 99, 0.45);
+  transition: transform 0.2s;
+}
+
+.lf-btn-primary:hover {
+  transform: translateY(-2px);
+}
+
+/* Floating hearts for thank you */
+.lf-hearts-anim {
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  pointer-events: none;
+  overflow: hidden;
+  height: 80px;
+}
+
+.lf-floating-heart {
+  position: absolute;
+  top: -20px;
+  font-size: 1.8rem;
+  animation: lf-drop-heart 3s ease forwards;
+  animation-delay: var(--delay, 0s);
+  left: calc(var(--i, 0) * 20%);
+  opacity: 0;
+}
+
+@keyframes lf-drop-heart {
+  0% { transform: translateY(-30px) scale(0); opacity: 0; }
+  40% { opacity: 1; transform: translateY(20px) scale(1.2); }
+  100% { transform: translateY(60px) scale(1); opacity: 0; }
+}
+
+/* ── Animations ───────────────────────────────────────────────────── */
+
+@keyframes lf-fade-in {
+  from { opacity: 0; transform: translateY(18px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+.lf-anim-enter {
+  animation: lf-fade-in 0.35s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.lf-anim-enter-right {
+  animation: lf-slide-in-right 0.35s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.lf-anim-enter-left {
+  animation: lf-slide-in-left 0.35s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.lf-anim-exit-left {
+  animation: lf-slide-out-left 0.25s cubic-bezier(0.4, 0, 0.2, 1) forwards;
+}
+
+.lf-anim-exit-right {
+  animation: lf-slide-out-right 0.25s cubic-bezier(0.4, 0, 0.2, 1) forwards;
+}
+
+@keyframes lf-slide-in-right {
+  from { opacity: 0; transform: translateX(40px); }
+  to { opacity: 1; transform: translateX(0); }
+}
+
+@keyframes lf-slide-in-left {
+  from { opacity: 0; transform: translateX(-40px); }
+  to { opacity: 1; transform: translateX(0); }
+}
+
+@keyframes lf-slide-out-left {
+  from { opacity: 1; transform: translateX(0); }
+  to { opacity: 0; transform: translateX(-40px); }
+}
+
+@keyframes lf-slide-out-right {
+  from { opacity: 1; transform: translateX(0); }
+  to { opacity: 0; transform: translateX(40px); }
+}
+
+.lf-tada {
+  animation: lf-tada 0.7s ease 0.3s both;
+}
+
+@keyframes lf-tada {
+  0% { transform: scale(0.8); opacity: 0; }
+  60% { transform: scale(1.04); opacity: 1; }
+  80% { transform: scale(0.97); }
+  100% { transform: scale(1); }
+}
+
+/* ── Editing Banner ───────────────────────────────────────────────── */
+
+.lf-editing-banner {
+  width: 100%;
+  text-align: center;
+  padding: 8px 16px;
+  color: #fff;
+  font-size: 0.82rem;
+  font-weight: 600;
+  letter-spacing: 0.02em;
+  opacity: 0.92;
+}
+
+.lf-save-review-hint {
+  text-align: center;
+  font-size: 0.78rem;
+  color: #aaa;
+  padding: 4px 0 12px;
+}
+
+/* ── Review Screen ────────────────────────────────────────────────── */
+
+.lf-review-bg {
+  background: #f8f4fc;
+  justify-content: flex-start;
+  padding-bottom: 60px;
+}
+
+.lf-top-bar-review {
+  background: linear-gradient(135deg, #1a0008, #6a0032);
+  border-bottom: 2px solid rgba(233, 30, 99, 0.2);
+  padding: 10px 16px;
+}
+
+.lf-top-bar-review .lf-back-icon {
+  color: #fff !important;
+}
+
+.lf-top-bar-review .lf-progress-label {
+  color: #f48fb1 !important;
+}
+
+.lf-review-container {
+  width: 100%;
+  max-width: 720px;
+  margin: 0 auto;
+  padding: 0 16px 40px;
+}
+
+.lf-review-header {
+  text-align: center;
+  padding: 32px 0 24px;
+}
+
+.lf-review-title {
+  font-size: 1.6rem;
+  font-weight: 700;
+  color: #4a0020;
+  margin: 8px 0 10px;
+}
+
+.lf-review-sub {
+  font-size: 0.92rem;
+  color: #777;
+  line-height: 1.5;
+  max-width: 500px;
+  margin: 0 auto;
+}
+
+.lf-readonly-badge {
+  display: inline-block;
+  margin-top: 14px;
+  background: #fce4ec;
+  color: #c2185b;
+  border: 1px solid #f8bbd0;
+  border-radius: 20px;
+  padding: 6px 16px;
+  font-size: 0.8rem;
+  font-weight: 600;
+}
+
+/* ── Review Section ───────────────────────────────────────────────── */
+
+.lf-review-section {
+  margin-bottom: 14px;
+  border-radius: 14px;
+  overflow: hidden;
+  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.07);
+}
+
+.lf-review-section-header {
+  width: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 10px;
+  padding: 14px 18px;
+  color: #fff;
+  font-size: 0.95rem;
+  font-weight: 700;
+  border: none;
+  cursor: pointer;
+  text-align: left;
+  transition: opacity 0.15s;
+}
+
+.lf-review-section-header:hover {
+  opacity: 0.92;
+}
+
+.lf-section-toggle {
+  font-size: 0.75rem;
+  opacity: 0.8;
+}
+
+/* ── Q&A rows in Review ───────────────────────────────────────────── */
+
+.lf-review-qa-list {
+  background: #fff;
+}
+
+.lf-review-qa {
+  padding: 14px 18px;
+  border-top: 1px solid #f5f5f5;
+}
+
+.lf-review-qa:first-child {
+  border-top: none;
+}
+
+.lf-review-q-row {
+  display: flex;
+  align-items: flex-start;
+  gap: 8px;
+  margin-bottom: 6px;
+}
+
+.lf-review-qnum {
+  font-size: 0.72rem;
+  font-weight: 700;
+  color: #e91e63;
+  background: #fce4ec;
+  border-radius: 10px;
+  padding: 2px 7px;
+  white-space: nowrap;
+  flex-shrink: 0;
+  margin-top: 2px;
+}
+
+.lf-review-q-text {
+  font-size: 0.88rem;
+  font-weight: 600;
+  color: #333;
+  line-height: 1.45;
+  flex: 1;
+}
+
+.lf-review-edit-btn {
+  flex-shrink: 0;
+  background: none;
+  border: 1.5px solid #e0e0e0;
+  border-radius: 8px;
+  padding: 4px 10px;
+  font-size: 0.78rem;
+  color: #888;
+  cursor: pointer;
+  transition: all 0.15s;
+  white-space: nowrap;
+}
+
+.lf-review-edit-btn:hover {
+  background: #fce4ec;
+  border-color: #e91e63;
+  color: #e91e63;
+}
+
+.lf-review-a-row {
+  padding-left: 38px;
+}
+
+.lf-review-a-text {
+  font-size: 0.9rem;
+  color: #444;
+  line-height: 1.55;
+  white-space: pre-wrap;
+  word-break: break-word;
+  background: #f9f9f9;
+  border: 1px solid #eee;
+  border-radius: 8px;
+  padding: 8px 12px;
+  display: block;
+}
+
+.lf-review-no-ans {
+  font-size: 0.85rem;
+  color: #f57c00;
+  font-style: italic;
+}
+
+/* ── Review Submit Block ──────────────────────────────────────────── */
+
+.lf-review-submit-block {
+  margin-top: 28px;
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+  align-items: center;
+}
+
+/* ── Read-only Footer ─────────────────────────────────────────────── */
+
+.lf-review-footer-actions {
+  margin-top: 32px;
+  display: flex;
+  justify-content: center;
+}
+
+.lf-review-search-bar {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  background: #fff;
+  border: 1px solid #f0d6e8;
+  border-radius: 12px;
+  padding: 10px 12px;
+  margin-bottom: 16px;
+  box-shadow: 0 2px 8px rgba(233, 30, 99, 0.08);
+  position: sticky;
+  top: 0;
+  z-index: 20;
+}
+
+.lf-review-search-icon {
+  flex-shrink: 0;
+  font-size: 1rem;
+}
+
+.lf-review-search-input {
+  flex: 1;
+  min-width: 0;
+  border: none;
+  outline: none;
+  font-size: 0.95rem;
+  background: transparent;
+  color: #333;
+}
+
+.lf-review-search-clear {
+  flex-shrink: 0;
+  border: none;
+  background: #fce4ec;
+  color: #c2185b;
+  width: 28px;
+  height: 28px;
+  border-radius: 50%;
+  cursor: pointer;
+  font-size: 0.75rem;
+}
+
+.lf-review-search-results {
+  margin-bottom: 16px;
+}
+
+.lf-review-search-summary {
+  font-size: 0.85rem;
+  color: #666;
+  margin: 0 0 10px 4px;
+}
+
+.lf-review-section-header-text {
+  flex: 1;
+  min-width: 0;
+  text-align: left;
+  line-height: 1.35;
+}
+
+.lf-review-section-meta {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  flex-shrink: 0;
+}
+
+.lf-review-section-count {
+  font-size: 0.72rem;
+  font-weight: 600;
+  opacity: 0.9;
+  background: rgba(255, 255, 255, 0.2);
+  padding: 3px 8px;
+  border-radius: 10px;
+  white-space: nowrap;
+}
+
+.lf-review-section-hint {
+  margin: 0;
+  padding: 10px 14px 12px;
+  font-size: 0.78rem;
+  color: #888;
+  line-height: 1.45;
+  background: #fff;
+  border-top: 1px solid #f5f5f5;
+}
+
+.lf-review-load-more-wrap {
+  padding: 12px 14px 14px;
+  background: #fff;
+  border-top: 1px solid #f5f5f5;
+}
+
+.lf-review-load-more {
+  width: 100%;
+  border: 1.5px solid #f8bbd0;
+  background: #fff;
+  color: #c2185b;
+  border-radius: 10px;
+  padding: 12px 14px;
+  font-size: 0.88rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: background 0.15s;
+}
+
+.lf-review-load-more:hover {
+  background: #fce4ec;
+}
+
+.lf-review-section-tag {
+  font-size: 0.72rem;
+  font-weight: 700;
+  color: #c2185b;
+  margin-bottom: 6px;
+}
+
+.lf-review-qa--compact {
+  padding: 12px 14px;
+}
+
+.lf-review-qa--compact .lf-review-q-text {
+  font-size: 0.84rem;
+}
+
+.lf-review-qa--compact .lf-review-a-text {
+  font-size: 0.85rem;
+  padding: 8px 10px;
+}
+
+/* ── Live save & draft ────────────────────────────────────────────── */
+
+.lf-draft-notice {
+  font-size: 0.88rem;
+  color: #ad1457;
+  background: #fce4ec;
+  border-radius: 10px;
+  padding: 10px 14px;
+  margin-bottom: 12px;
+  text-align: center;
+}
+
+.lf-live-save-badge {
+  position: relative;
+  z-index: 1;
+  text-align: center;
+  font-size: 0.75rem;
+  color: #2e7d32;
+  background: #e8f5e9;
+  padding: 4px 12px;
+  border-radius: 20px;
+  margin: 0 auto 8px;
+  width: fit-content;
+}
+
+.lf-q-description {
+  font-size: 0.9rem;
+  color: #666;
+  margin: -8px 0 12px;
+}
+
+/* ── Image upload ─────────────────────────────────────────────────── */
+
+.lf-image-upload-zone {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.lf-image-input-hidden {
+  display: none;
+}
+
+.lf-image-upload-btn {
+  width: 100%;
+  padding: 14px;
+  border: 2px dashed currentColor;
+  border-radius: 12px;
+  background: #fff;
+  font-size: 0.95rem;
+  cursor: pointer;
+  transition: background 0.2s;
+}
+
+.lf-image-upload-btn:hover:not(:disabled) {
+  background: #fff5f8;
+}
+
+.lf-image-upload-btn:disabled {
+  opacity: 0.6;
+  cursor: wait;
+}
+
+.lf-image-hint {
+  font-size: 0.8rem;
+  color: #888;
+  margin: 0;
+}
+
+.lf-uploaded-grid {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
+  margin-top: 12px;
+}
+
+.lf-uploaded-item {
+  position: relative;
+  width: 72px;
+  height: 72px;
+}
+
+.lf-uploaded-thumb,
+.lf-image-thumb {
+  width: 72px;
+  height: 72px;
+  object-fit: cover;
+  border-radius: 8px;
+  border: 1px solid #eee;
+}
+
+.lf-remove-image {
+  position: absolute;
+  top: -6px;
+  right: -6px;
+  width: 22px;
+  height: 22px;
+  border-radius: 50%;
+  border: none;
+  background: #c2185b;
+  color: #fff;
+  font-size: 12px;
+  cursor: pointer;
+  line-height: 1;
+}
+
+.lf-upload-status {
+  font-size: 0.85rem;
+  color: #2e7d32;
+  margin-top: 8px;
+}
+
+.lf-image-answer-preview {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+}
+
+.lf-image-thumb-link {
+  display: block;
+}
+
+.lf-followup-bg {
+  justify-content: flex-start;
+}
+
+.lf-followup-card {
+  gap: 14px;
+  min-height: auto;
+  flex: 0 1 auto;
+  animation: lf-followup-pop 0.55s ease both;
+}
+
+@keyframes lf-followup-pop {
+  from {
+    opacity: 0;
+    transform: translateY(24px) scale(0.98);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0) scale(1);
+  }
+}
+
+.lf-chat-thread {
+  margin-top: 12px;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  animation: lf-chat-rise 0.45s ease both;
+}
+
+@keyframes lf-chat-rise {
+  from {
+    opacity: 0;
+    transform: translateY(10px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.lf-chat-title {
+  font-size: 0.75rem;
+  font-weight: 800;
+  color: #ad1457;
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+}
+
+.lf-chat-bubble {
+  width: fit-content;
+  max-width: 92%;
+  display: flex;
+  flex-direction: column;
+  gap: 3px;
+  border-radius: 12px;
+  padding: 9px 12px;
+  font-size: 0.88rem;
+  line-height: 1.45;
+  white-space: pre-wrap;
+  word-break: break-word;
+  box-shadow: 0 6px 18px rgba(0, 0, 0, 0.07);
+}
+
+.lf-chat-bubble--admin {
+  background: #fff3f8;
+  border: 1px solid #ffc1d8;
+  color: #6a0032;
+}
+
+.lf-chat-bubble--user {
+  align-self: flex-end;
+  background: #ecfbf6;
+  border: 1px solid #bdeee0;
+  color: #1f5c50;
+}
+
+.lf-chat-sender {
+  font-size: 0.68rem;
+  font-weight: 800;
+  text-transform: uppercase;
+  opacity: 0.72;
+}
+
+.lf-user-reply-form {
+  display: flex;
+  gap: 8px;
+  align-items: flex-end;
+  margin-top: 2px;
+}
+
+.lf-user-reply-input {
+  flex: 1;
+  border: 1.5px solid #f8bbd0;
+  border-radius: 10px;
+  padding: 9px 10px;
+  resize: vertical;
+  min-height: 44px;
+  font-family: inherit;
+  outline: none;
+}
+
+.lf-user-reply-input:focus {
+  border-color: #e91e63;
+  box-shadow: 0 0 0 3px rgba(233, 30, 99, 0.1);
+}
+
+.lf-user-reply-btn {
+  border: none;
+  border-radius: 10px;
+  padding: 10px 16px;
+  color: #fff;
+  background: #00a884;
+  font-weight: 700;
+  cursor: pointer;
+}
+
+.lf-user-reply-btn:disabled {
+  opacity: 0.55;
+  cursor: not-allowed;
+}
+
+.lf-chat-waiting {
+  color: #888;
+  font-size: 0.78rem;
+  font-style: italic;
+}
+
+/* ── Mobile Responsive ────────────────────────────────────────────── */
+
+@media (max-width: 600px) {
+  .lf-cover-card,
+  .lf-section-card,
+  .lf-question-card,
+  .lf-submit-card,
+  .lf-center-card {
+    padding: 28px 22px;
+  }
+
+  .lf-cover-title {
+    font-size: 1.4rem;
+  }
+
+  .lf-cover-desc-scroll {
+    max-height: 220px;
+  }
+
+  .lf-q-text {
+    font-size: 1rem;
+  }
+
+  .lf-question-bg::before {
+    inset: -28%;
+    background-size: 260px 260px, 118px 118px;
+  }
+
+  .lf-question-bg::after {
+    opacity: 0.52;
+  }
+
+  .lf-question-section-badge {
+    border-radius: 14px;
+    font-size: 0.74rem;
+  }
+
+  .lf-question-card::after {
+    right: 14px;
+    top: 18px;
+    font-size: 3.4rem;
+  }
+
+  .lf-input-para {
+    min-height: 100px;
+  }
+
+  .lf-nav-btn {
+    width: 46px;
+    height: 46px;
+  }
+
+  .lf-section-card {
+    max-height: 75vh;
+  }
+
+  .lf-review-container {
+    padding: 0 12px 32px;
+  }
+
+  .lf-review-header {
+    padding: 20px 0 16px;
+  }
+
+  .lf-review-title {
+    font-size: 1.25rem;
+  }
+
+  .lf-review-sub--mobile {
+    font-size: 0.82rem;
+    padding: 0 4px;
+  }
+
+  .lf-review-section-header {
+    padding: 12px 14px;
+    font-size: 0.88rem;
+    gap: 8px;
+    flex-wrap: wrap;
+  }
+
+  .lf-review-section-header-text {
+    font-size: 0.88rem;
+  }
+
+  .lf-review-qa {
+    padding: 12px 14px;
+  }
+
+  .lf-review-q-row {
+    flex-direction: column;
+    gap: 4px;
+  }
+
+  .lf-review-qnum {
+    align-self: flex-start;
+  }
+
+  .lf-review-q-text {
+    font-size: 0.84rem;
+  }
+
+  .lf-review-a-row {
+    padding-left: 0;
+  }
+
+  .lf-review-a-text {
+    font-size: 0.85rem;
+    padding: 10px 12px;
+  }
+
+  .lf-review-search-bar {
+    margin-bottom: 12px;
+    padding: 8px 10px;
+  }
+
+  .lf-review-search-input {
+    font-size: 16px;
+  }
+
+  .lf-user-reply-form {
+    flex-direction: column;
+    align-items: stretch;
+  }
+
+  .lf-user-reply-btn {
+    width: 100%;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .lf-question-bg::before,
+  .lf-question-bg::after,
+  .lf-question-card,
+  .lf-question-card::before,
+  .lf-question-card::after,
+  .lf-question-love-layer,
+  .lf-love-petal {
+    animation: none;
+  }
+}
