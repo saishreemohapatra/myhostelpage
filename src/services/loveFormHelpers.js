@@ -112,13 +112,6 @@ export const getLatestAdminActivityFromResponses = (responses) => {
   return latest;
 };
 
-export const markAdminActivitySeen = (response) => {
-  const latest = getLatestAdminActivity(response);
-  if (latest?.createdAt) {
-    localStorage.setItem(LOVE_ADMIN_REPLY_SEEN_KEY, latest.createdAt);
-  }
-};
-
 /** Grow paragraph textareas to fit content (avoids inner scrollbars on mobile). */
 export const syncLoveFormTextareaHeight = (textarea) => {
   if (!textarea || textarea.tagName !== "TEXTAREA") return;

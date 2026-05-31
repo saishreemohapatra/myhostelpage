@@ -3,19 +3,17 @@ import "../styles/dashboard.css";
 
 import logo from "../assets/Photo-1.jpeg";
 
-import { signOut } from "firebase/auth";
-import { ref, onValue } from "firebase/database";
-import { auth, db } from "../services/firebase";
+import { onAuthStateChanged, signOut } from "firebase/auth";
+import { onValue, update } from "firebase/database";
+import { auth } from "../services/firebase";
 import { useNavigate } from "react-router-dom";
-import {
-  LOVE_ADMIN_REPLY_SEEN_KEY,
-  LOVE_RESPONSES_PATH,
-  getLatestAdminActivityFromResponses,
-} from "../services/loveFormHelpers";
+import { getLatestAdminActivity } from "../services/loveFormHelpers";
+import { getLoveFormRef } from "../services/loveFormStorage";
 
 const Dashboard = () => {
   const navigate = useNavigate();
   const [loveNotification, setLoveNotification] = useState(null);
+  const [userId, setUserId] = useState(null);
 
   const handleLogout = async () => {
     await signOut(auth);
@@ -23,27 +21,43 @@ const Dashboard = () => {
   };
 
   useEffect(() => {
-    const unsub = onValue(ref(db, LOVE_RESPONSES_PATH), (snapshot) => {
-      const latest = getLatestAdminActivityFromResponses(snapshot.val());
-      const seenAt = localStorage.getItem(LOVE_ADMIN_REPLY_SEEN_KEY);
+    const unsubAuth = onAuthStateChanged(auth, (user) => {
+      setUserId(user?.uid || null);
+    });
+    return () => unsubAuth();
+  }, []);
+
+  useEffect(() => {
+    if (!userId) {
+      setLoveNotification(null);
+      return undefined;
+    }
+
+    const unsub = onValue(getLoveFormRef(userId), (snapshot) => {
+      const data = snapshot.val();
+      if (!data) {
+        setLoveNotification(null);
+        return;
+      }
+      const latest = getLatestAdminActivity(data);
+      const seenAt = data.lastSeenAdminActivity;
       if (
         latest?.createdAt &&
         (!seenAt || new Date(latest.createdAt) > new Date(seenAt))
       ) {
-        setLoveNotification(latest);
+        setLoveNotification({ ...latest, responseKey: userId });
       } else {
         setLoveNotification(null);
       }
     });
     return () => unsub();
-  }, []);
+  }, [userId]);
 
   const openLoveNotification = () => {
-    if (loveNotification?.createdAt) {
-      localStorage.setItem(
-        LOVE_ADMIN_REPLY_SEEN_KEY,
-        loveNotification.createdAt,
-      );
+    if (userId && loveNotification?.createdAt) {
+      update(getLoveFormRef(userId), {
+        lastSeenAdminActivity: loveNotification.createdAt,
+      });
     }
     navigate("/love-form");
   };

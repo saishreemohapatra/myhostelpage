@@ -145,8 +145,9 @@ const ResponseCard = ({ response, index, onDelete }) => {
     }
   };
 
-  const formattedDate = response.submittedAt
-    ? new Date(response.submittedAt).toLocaleString("en-IN", {
+  const dateSource = response.submittedAt || response.updatedAt;
+  const formattedDate = dateSource
+    ? new Date(dateSource).toLocaleString("en-IN", {
         day: "2-digit",
         month: "short",
         year: "numeric",
@@ -154,6 +155,8 @@ const ResponseCard = ({ response, index, onDelete }) => {
         minute: "2-digit",
       })
     : "Unknown date";
+  const statusLabel =
+    response.status === "draft" ? "Draft (in progress)" : "Submitted";
 
   const extraQuestions = normalizeExtraQuestions(response.extraQuestions);
   const totalAnswers =
@@ -262,8 +265,13 @@ const ResponseCard = ({ response, index, onDelete }) => {
           <span className="la-response-num">#{index + 1}</span>
           <span className="la-response-icon">💌</span>
           <div className="la-response-info">
+            {response.userEmail && (
+              <span className="la-response-email">{response.userEmail}</span>
+            )}
             <span className="la-response-date">{formattedDate}</span>
-            <span className="la-response-count">{totalAnswers} answers</span>
+            <span className="la-response-count">
+              {statusLabel} · {totalAnswers} answers
+            </span>
           </div>
         </div>
 
@@ -456,7 +464,11 @@ const AdminDashboard = ({ onLogout }) => {
       }
       const list = Object.entries(data).map(([key, val]) => ({
         key,
-        submittedAt: val.submittedAt || "",
+        userEmail: val.userEmail || "",
+        status:
+          val.status || (val.submittedAt ? "submitted" : val.answers ? "draft" : ""),
+        submittedAt: val.submittedAt || val.updatedAt || "",
+        updatedAt: val.updatedAt || "",
         answers: val.answers || {},
         threads: val.threads || {},
         extraQuestions: val.extraQuestions || {},

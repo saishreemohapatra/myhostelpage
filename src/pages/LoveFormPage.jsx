@@ -6,7 +6,15 @@ import React, {
   useMemo,
 } from "react";
 import { ref, push, onValue, update } from "firebase/database";
-import { db } from "../services/firebase";
+import { onAuthStateChanged } from "firebase/auth";
+import { auth, db } from "../services/firebase";
+import {
+  getLoveFormRef,
+  migrateLocalStorageToFirebase,
+  saveLoveFormDraft,
+  submitLoveFormToFirebase,
+  markAdminActivitySeenInFirebase,
+} from "../services/loveFormStorage";
 import { useNavigate } from "react-router-dom";
 import {
   FORM_INFO,
@@ -25,13 +33,8 @@ import {
 import {
   ADMIN_QUESTIONS_SECTION,
   LOVE_RESPONSES_PATH,
-  LOVE_SUBMITTED_KEY,
-  LOVE_ANSWERS_KEY,
-  LOVE_DRAFT_STEP_KEY,
-  LOVE_RESPONSE_KEY,
   findPendingExtraQuestion,
   getExtraAnswerText,
-  markAdminActivitySeen,
   normalizeExtraQuestions,
   normalizeThread,
   syncLoveFormTextareaHeight,
@@ -244,6 +247,7 @@ const ReadOnlyAnswers = ({
   savedAnswers,
   response,
   responseKey,
+  userId,
   navigate,
   onUserReply,
   onSubmitExtraAnswer,
@@ -263,8 +267,10 @@ const ReadOnlyAnswers = ({
   const isSearching = trimmedSearch.length > 0;
 
   useEffect(() => {
-    if (response) markAdminActivitySeen(response);
-  }, [response]);
+    if (response && userId) {
+      markAdminActivitySeenInFirebase(userId, response);
+    }
+  }, [response, userId]);
 
   const toggleSection = (sectionId) => {
     setOpenSections((prev) => ({ ...prev, [sectionId]: !prev[sectionId] }));
@@ -588,36 +594,30 @@ const LoveFormPage = () => {
   const inputRef = useRef(null);
   const fileInputRef = useRef(null);
   const touchNextRef = useRef(false);
+  const draftSaveTimerRef = useRef(null);
+  const [userId, setUserId] = useState(null);
+  const [userEmail, setUserEmail] = useState("");
 
-  // Check Firebase before locking the form. If admin deletes the response,
-  // the local one-time lock is cleared and the form opens again.
   useEffect(() => {
-    const restoreDraft = () => {
-      try {
-        const draft = JSON.parse(localStorage.getItem(LOVE_ANSWERS_KEY) || "{}");
-        if (Object.keys(draft).length > 0) {
-          setAnswers(draft);
-          setHasDraft(true);
-        }
-        const savedStep = parseInt(
-          localStorage.getItem(LOVE_DRAFT_STEP_KEY) || "0",
-          10,
-        );
-        if (savedStep > 0 && savedStep < STEPS.length) {
-          setStepIdx(savedStep);
-        }
-      } catch {
-        /* ignore corrupt draft */
-      } finally {
-        setIsCheckingSubmission(false);
+    const unsubAuth = onAuthStateChanged(auth, (user) => {
+      if (!user) {
+        navigate("/");
+        return;
       }
-    };
+      setUserId(user.uid);
+      setUserEmail(user.email || "");
+    });
+    return () => unsubAuth();
+  }, [navigate]);
 
-    const clearSubmissionLock = () => {
-      localStorage.removeItem(LOVE_SUBMITTED_KEY);
-      localStorage.removeItem(LOVE_RESPONSE_KEY);
-      localStorage.removeItem(LOVE_ANSWERS_KEY);
-      localStorage.removeItem(LOVE_DRAFT_STEP_KEY);
+  // Load / sync entire love form record from Firebase (draft or submitted).
+  useEffect(() => {
+    if (!userId) return undefined;
+
+    let cancelled = false;
+    let unsubDb = () => {};
+
+    const resetToEmpty = () => {
       setAlreadySubmitted(false);
       setSubmittedAnswers({});
       setSubmittedResponse(null);
@@ -628,87 +628,96 @@ const LoveFormPage = () => {
       setIsCheckingSubmission(false);
     };
 
-    const applySubmittedResponse = (key, value) => {
+    const applySubmitted = (key, value) => {
       if (!value) {
-        clearSubmissionLock();
+        resetToEmpty();
         return;
       }
       setAlreadySubmitted(true);
       setSubmittedResponseKey(key);
       setSubmittedResponse({ key, ...value });
       setSubmittedAnswers(value.answers || {});
-      localStorage.setItem(LOVE_RESPONSE_KEY, key);
-      localStorage.setItem(LOVE_ANSWERS_KEY, JSON.stringify(value.answers || {}));
       setIsCheckingSubmission(false);
     };
 
-    if (localStorage.getItem(LOVE_SUBMITTED_KEY) !== "true") {
-      restoreDraft();
-      return undefined;
-    }
+    (async () => {
+      try {
+        await migrateLocalStorageToFirebase(userId, userEmail);
+      } catch (err) {
+        console.error("Love form migration failed:", err);
+      }
+      if (cancelled) return;
 
-    setAlreadySubmitted(true);
-    const storedResponseKey = localStorage.getItem(LOVE_RESPONSE_KEY);
-    if (storedResponseKey) {
-      return onValue(
-        ref(db, `${LOVE_RESPONSES_PATH}/${storedResponseKey}`),
-        (snap) => applySubmittedResponse(storedResponseKey, snap.val()),
+      unsubDb = onValue(
+        getLoveFormRef(userId),
+        (snap) => {
+          const val = snap.val();
+          if (!val) {
+            resetToEmpty();
+            return;
+          }
+
+          const isSubmitted =
+            val.status === "submitted" || Boolean(val.submittedAt);
+
+          if (isSubmitted) {
+            applySubmitted(userId, val);
+            return;
+          }
+
+          setAlreadySubmitted(false);
+          setSubmittedResponse(null);
+          setSubmittedResponseKey("");
+          setAnswers(val.answers || {});
+          const savedStep = parseInt(val.stepIdx, 10);
+          if (savedStep > 0 && savedStep < STEPS.length) {
+            setStepIdx(savedStep);
+          }
+          setHasDraft(Object.keys(val.answers || {}).length > 0);
+          setIsCheckingSubmission(false);
+        },
         (err) => {
           console.error(err);
           setIsCheckingSubmission(false);
         },
       );
+    })();
+
+    return () => {
+      cancelled = true;
+      unsubDb();
+    };
+  }, [userId, userEmail]);
+
+  // Live-save draft answers + step to Firebase.
+  useEffect(() => {
+    if (!userId || alreadySubmitted || showThankYou) return undefined;
+    if (Object.keys(answers).length === 0 && stepIdx === 0) return undefined;
+
+    if (draftSaveTimerRef.current) {
+      clearTimeout(draftSaveTimerRef.current);
     }
 
-    return onValue(
-      ref(db, LOVE_RESPONSES_PATH),
-      (snap) => {
-        const data = snap.val();
-        if (!data) {
-          clearSubmissionLock();
-          return;
-        }
-        const [key, value] =
-          Object.entries(data).sort(
-            ([, a], [, b]) =>
-              new Date(b?.submittedAt || 0) - new Date(a?.submittedAt || 0),
-          )[0] || [];
-        if (key && value) {
-          applySubmittedResponse(key, value);
-        } else {
-          clearSubmissionLock();
-        }
-      },
-      (err) => {
-        console.error(err);
-        try {
-          const saved = JSON.parse(
-            localStorage.getItem(LOVE_ANSWERS_KEY) || "{}",
-          );
-          setSubmittedAnswers(saved);
-        } catch {
-          setSubmittedAnswers({});
-        } finally {
-          setIsCheckingSubmission(false);
-        }
+    draftSaveTimerRef.current = setTimeout(async () => {
+      try {
+        await saveLoveFormDraft(userId, {
+          answers,
+          stepIdx,
+          userEmail,
+        });
+        setLiveSavedAt(new Date());
+        setHasDraft(Object.keys(answers).length > 0);
+      } catch (err) {
+        console.error("Firebase draft save failed:", err);
       }
-    );
-  }, []);
+    }, 600);
 
-  // Live-save answers and current step (love form answers in real time)
-  useEffect(() => {
-    if (alreadySubmitted || showThankYou) return;
-    if (Object.keys(answers).length > 0) {
-      localStorage.setItem(LOVE_ANSWERS_KEY, JSON.stringify(answers));
-      setHasDraft(true);
-      setLiveSavedAt(new Date());
-    }
-  }, [answers, alreadySubmitted, showThankYou]);
-
-  useEffect(() => {
-    if (alreadySubmitted || showThankYou) return;
-    localStorage.setItem(LOVE_DRAFT_STEP_KEY, String(stepIdx));
-  }, [stepIdx, alreadySubmitted, showThankYou]);
+    return () => {
+      if (draftSaveTimerRef.current) {
+        clearTimeout(draftSaveTimerRef.current);
+      }
+    };
+  }, [answers, stepIdx, userId, userEmail, alreadySubmitted, showThankYou]);
 
   // Sync currentInput when step changes
   useEffect(() => {
@@ -821,26 +830,21 @@ const LoveFormPage = () => {
   };
 
   const handleSubmit = async () => {
-    if (isSubmitting) return;
+    if (isSubmitting || !userId) return;
     setIsSubmitting(true);
     setSubmitError("");
     try {
-      const responsesRef = ref(db, LOVE_RESPONSES_PATH);
-      const savedRef = await push(responsesRef, {
-        submittedAt: new Date().toISOString(),
-        answers,
-      });
-      localStorage.setItem(LOVE_SUBMITTED_KEY, "true");
-      localStorage.setItem(LOVE_RESPONSE_KEY, savedRef.key);
-      localStorage.setItem(LOVE_ANSWERS_KEY, JSON.stringify(answers));
-      localStorage.removeItem(LOVE_DRAFT_STEP_KEY);
-      setSubmittedResponseKey(savedRef.key);
+      await submitLoveFormToFirebase(userId, { answers, userEmail });
+      const submittedAt = new Date().toISOString();
+      setSubmittedResponseKey(userId);
       setSubmittedResponse({
-        key: savedRef.key,
-        submittedAt: new Date().toISOString(),
+        key: userId,
+        submittedAt,
         answers,
+        status: "submitted",
       });
       setSubmittedAnswers(answers);
+      setAlreadySubmitted(true);
       setShowThankYou(true);
     } catch (err) {
       console.error(err);
@@ -971,6 +975,7 @@ const LoveFormPage = () => {
           savedAnswers={submittedAnswers}
           response={submittedResponse}
           responseKey={submittedResponseKey}
+          userId={userId}
           navigate={navigate}
           onUserReply={handleUserReply}
           onSubmitExtraAnswer={handleSubmitExtraAnswer}
@@ -1205,7 +1210,7 @@ const LoveFormPage = () => {
         </div>
 
         {liveSavedAt && (
-          <div className="lf-live-save-badge">💾 Answers saved live</div>
+          <div className="lf-live-save-badge">💾 Saved to Firebase</div>
         )}
 
         <div className={`lf-question-card lf-anim-${animDir}`}>
